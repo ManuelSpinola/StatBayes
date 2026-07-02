@@ -1,7 +1,13 @@
+^renv$
+^renv\.lock$
 ^.*\.Rproj$
 ^\.Rproj\.user$
 ^data-raw$
-dev_history.R
+^dev_history\.R$
 ^dev$
-$run_dev.*
-^.here$
+^run_dev.*$
+^\.here$
+^README\.md$
+^LICENSE\.md$
+^\.github$
+^rsconnect$

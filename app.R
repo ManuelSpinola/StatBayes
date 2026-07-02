@@ -3,4 +3,4 @@
 # Or use the blue button on top of this file
 pkgload::load_all(export_all = FALSE,helpers = FALSE,attach_testthat = FALSE)
 options( "golem.app.prod" = TRUE)
-StatModels::run_app() # add parameters here (if any)
+StatBayes::run_app() # add parameters here (if any)

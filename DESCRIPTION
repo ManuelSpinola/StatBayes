@@ -1,0 +1,47 @@
+Package: StatBayes
+Title: Interactive Bayesian Analysis
+Version: 0.1.0
+Date: 2026-07-02
+Authors@R: 
+    person(given = "Manuel",
+           family = "Spinola",
+           role = c("aut", "cre"),
+           email = "manuel.spinola@una.ac.cr",
+           comment = c(ORCID = ""))
+Description: An interactive and didactic Shiny application for applied Bayesian
+    analysis using brms. Covers prior distributions, Bayesian linear and
+    generalized regression, generalized additive models, mixed models, MCMC
+    diagnostics, and model comparison (LOO, WAIC). Part of the StatSuite
+    ecosystem, ICOMVIS, Universidad Nacional, Costa Rica.
+License: MIT + file LICENSE
+URL: https://github.com/ManuelSpinola/StatBayes
+BugReports: https://github.com/ManuelSpinola/StatBayes/issues
+Imports:
+    config,
+    golem,
+    shiny,
+    bslib,
+    bsicons,
+    shinyjs,
+    pkgload,
+    ggplot2,
+    dplyr,
+    tidyr,
+    tibble,
+    purrr,
+    scales,
+    DT,
+    readr,
+    readxl,
+    brms,
+    bayesplot,
+    posterior,
+    loo,
+    tidybayes,
+    parameters,
+    performance,
+    modelbased,
+    BayesFactor
+Encoding: UTF-8
+LazyData: true
+RoxygenNote: 7.3.2

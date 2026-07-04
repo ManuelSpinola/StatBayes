@@ -11,7 +11,6 @@ app_server <- function(input, output, session) {
   mod_gam_bayes_server("gam_bayes")
   mod_mixed_bayes_server("mixed_bayes")
   mod_mcmc_server("mcmc")
-  mod_comparacion_server("comparacion")
   mod_acerca_de_server("acerca_de")
 
   session$onSessionEnded(function() {})

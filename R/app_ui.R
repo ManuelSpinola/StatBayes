@@ -29,7 +29,6 @@ app_ui <- function(request) {
       "Manuel Sp\u00ednola \u00b7 ICOMVIS \u00b7 Universidad Nacional \u00b7 Costa Rica"
     ),
 
-    # ── Módulos activos ───────────────────────────────────
     bslib::nav_panel(
       title = "Distribuciones a priori",
       icon  = bsicons::bs_icon("sliders"),
@@ -61,15 +60,9 @@ app_ui <- function(request) {
     ),
 
     bslib::nav_panel(
-      title = "Diagn\u00f3stico MCMC",
+      title = "Inferencia MCMC",
       icon  = bsicons::bs_icon("activity"),
       mod_mcmc_ui("mcmc")
-    ),
-
-    bslib::nav_panel(
-      title = "Comparaci\u00f3n de modelos",
-      icon  = bsicons::bs_icon("clipboard2-data"),
-      mod_comparacion_ui("comparacion")
     ),
 
     bslib::nav_spacer(),

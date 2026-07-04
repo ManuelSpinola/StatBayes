@@ -5,16 +5,17 @@
 # Pestañas:
 #   1.  ¿Qué es?
 #   2.  Fundamentos
-#   3.  Los datos (Cargar + Tipos de variables)
+#   3.  Los datos (Datos de ejemplo + Mis datos + Tipos de variables)
 #   4.  Explorar
 #   5.  Priors
 #   6.  Ajustar modelo
 #   7.  Diagnóstico MCMC
-#   8.  Parámetros
-#   9.  Gráficos
-#   10. Efectos marginales
-#   11. Comparar modelos
-#   12. Código R
+#   8.  Performance
+#   9.  Parámetros
+#   10. Gráficos
+#   11. Efectos marginales
+#   12. Comparar modelos
+#   13. Código R
 # ============================================================
 
 # ── UI ────────────────────────────────────────────────────
@@ -324,56 +325,26 @@ mod_lm_bayes_ui <- function(id) {
         card_body(
           navset_pill(
 
+            # ── Sub 1: Datos de ejemplo ─────────────
             nav_panel(
-              title = tagList(bs_icon("database", class = "me-1"),
-                              "Cargar datos"),
+              title = tagList(bs_icon("collection", class = "me-1"),
+                              "Datos de ejemplo"),
               br(),
               layout_columns(
                 col_widths = c(4, 8),
-                card(
-                  card_header(bs_icon("folder2-open", class = "me-1"),
-                              "Fuente de datos"),
-                  card_body(
-                    style = "overflow: visible; height: auto;",
-                    radioButtons(
-                      ns("fuente_datos_lmb"),
-                      label   = tagList(bs_icon("database", class = "me-1"),
-                                        "Dataset de ejemplo:"),
-                      choices = c(
-                        "Densidad de especie de ave (Loyn, 1987)"    = "birdabundance_lm",
-                        "Peso al nacer \u2014 salud perinatal (Hosmer)" = "birthwt_lm",
-                        "Cargar mis propios datos"                    = "propio"
-                      ),
-                      selected = "birdabundance_lm"
+                div(
+                  radioButtons(
+                    ns("fuente_datos_lmb"),
+                    label   = tagList(bs_icon("database", class = "me-1"),
+                                      "Seleccionar dataset:"),
+                    choices = c(
+                      "Densidad de especie de ave (Loyn, 1987)"    = "birdabundance_lm",
+                      "Peso al nacer \u2014 salud perinatal (Hosmer)" = "birthwt_lm"
                     ),
-                    conditionalPanel(
-                      condition = paste0("input['", ns("fuente_datos_lmb"),
-                                         "'] === 'propio'"),
-                      tags$hr(),
-                      fileInput(
-                        ns("archivo_lmb"),
-                        label       = "Seleccionar archivo:",
-                        accept      = c(".csv", ".xlsx", ".xls"),
-                        buttonLabel = "Buscar\u2026",
-                        placeholder = "CSV o Excel"
-                      ),
-                      selectInput(
-                        ns("separador_lmb"),
-                        label   = "Separador (CSV):",
-                        choices = c(
-                          "Coma (,)"         = ",",
-                          "Punto y coma (;)" = ";",
-                          "Tabulador"        = "\t"
-                        )
-                      ),
-                      p(class = "small text-muted mb-0",
-                        bs_icon("info-circle", class = "me-1"),
-                        "La primera fila debe contener los nombres de las columnas.")
-                    ),
-                    tags$hr(),
-                    uiOutput(ns("info_dataset_lmb")),
-                    uiOutput(ns("resumen_datos_lmb"))
-                  )
+                    selected = "birdabundance_lm"
+                  ),
+                  tags$hr(),
+                  uiOutput(ns("info_dataset_lmb"))
                 ),
                 card(
                   card_header(bs_icon("eye", class = "me-1"), "Vista previa"),
@@ -387,15 +358,59 @@ mod_lm_bayes_ui <- function(id) {
               )
             ),
 
+            # ── Sub 2: Mis datos ─────────────────────
+            nav_panel(
+              title = tagList(bs_icon("folder2-open", class = "me-1"),
+                              "Mis datos"),
+              br(),
+              layout_columns(
+                col_widths = c(4, 8),
+                div(
+                  p(class = "small text-muted mb-3",
+                    bs_icon("info-circle", class = "me-1"),
+                    "Sube un archivo CSV o Excel. ",
+                    "La primera fila debe contener los nombres de las columnas."),
+                  fileInput(
+                    ns("archivo_lmb"),
+                    label       = "Seleccionar archivo:",
+                    accept      = c(".csv", ".xlsx", ".xls"),
+                    buttonLabel = "Buscar\u2026",
+                    placeholder = "CSV o Excel"
+                  ),
+                  selectInput(
+                    ns("separador_lmb"),
+                    label   = "Separador (CSV):",
+                    choices = c(
+                      "Coma (,)"         = ",",
+                      "Punto y coma (;)" = ";",
+                      "Tabulador"        = "\t"
+                    )
+                  ),
+                  tags$hr(),
+                  uiOutput(ns("resumen_datos_propio_lmb"))
+                ),
+                card(
+                  card_header(bs_icon("eye", class = "me-1"), "Vista previa"),
+                  card_body(
+                    style = "overflow: auto;",
+                    uiOutput(ns("cards_datos_propio_lmb")),
+                    br(),
+                    DTOutput(ns("tabla_preview_propio_lmb"))
+                  )
+                )
+              )
+            ),
+
+            # ── Sub 3: Tipos de variables ────────────
             nav_panel(
               title = tagList(bs_icon("sliders2", class = "me-1"),
                               "Tipos de variables"),
               br(),
               p(class = "small text-muted mb-3",
                 "Verifica que cada variable tenga el tipo correcto. ",
-                "Las variables ", strong("categóricas"),
+                "Las variables ", strong("categ\u00f3ricas"),
                 " deben ser ", strong("Factor"), ". ",
-                "Las variables codificadas como números pero que ",
+                "Las variables codificadas como n\u00fameros pero que ",
                 "representan grupos deben cambiarse a Factor antes de modelar."
               ),
               layout_columns(
@@ -899,7 +914,7 @@ mod_lm_bayes_ui <- function(id) {
       ),
 
       # ════════════════════════════════════════════════
-      # PESTAÑA 9: Gráficos
+      # PESTAÑA 10: Gráficos
       # ════════════════════════════════════════════════
       nav_panel(
         title = tagList(bs_icon("graph-up-arrow", class = "me-1"),
@@ -935,7 +950,7 @@ mod_lm_bayes_ui <- function(id) {
       ),
 
       # ════════════════════════════════════════════════
-      # PESTAÑA 10: Efectos marginales
+      # PESTAÑA 11: Efectos marginales
       # ════════════════════════════════════════════════
       nav_panel(
         title = tagList(bs_icon("arrows-angle-expand", class = "me-1"),
@@ -1018,7 +1033,7 @@ mod_lm_bayes_ui <- function(id) {
       ),
 
       # ════════════════════════════════════════════════
-      # PESTAÑA 11: Comparar modelos
+      # PESTAÑA 12: Comparar modelos
       # ════════════════════════════════════════════════
       nav_panel(
         title = tagList(bs_icon("arrow-left-right", class = "me-1"),
@@ -1086,7 +1101,7 @@ mod_lm_bayes_ui <- function(id) {
       ),
 
       # ════════════════════════════════════════════════
-      # PESTAÑA 12: Código R
+      # PESTAÑA 13: Código R
       # ════════════════════════════════════════════════
       nav_panel(
         title = tagList(bs_icon("code-slash", class = "me-1"), "Código R"),
@@ -1125,35 +1140,17 @@ mod_lm_bayes_server <- function(id) {
     datos <- reactive({
       fuente <- input$fuente_datos_lmb
       req(!is.null(fuente) && nchar(fuente) > 0)
-      if (fuente != "propio") {
-        tryCatch({
-          e <- new.env()
-          load(system.file("app/data", paste0(fuente, ".rda"),
-                           package = "StatBayes"), envir = e)
-          df <- get(ls(e)[1], envir = e)
-          df |> dplyr::mutate(dplyr::across(where(is.character), as.factor))
-        }, error = function(err) {
-          showNotification(paste("Error al cargar dataset:", err$message),
-                           type = "error", duration = 6)
-          NULL
-        })
-      } else {
-        req(input$archivo_lmb)
-        ext <- tools::file_ext(input$archivo_lmb$name)
-        tryCatch({
-          df <- if (ext %in% c("xlsx", "xls"))
-            readxl::read_excel(input$archivo_lmb$datapath)
-          else
-            readr::read_delim(input$archivo_lmb$datapath,
-                              delim = input$separador_lmb,
-                              show_col_types = FALSE)
-          df |> dplyr::mutate(dplyr::across(where(is.character), as.factor))
-        }, error = function(e) {
-          showNotification(paste("Error al leer archivo:", e$message),
-                           type = "error", duration = 6)
-          NULL
-        })
-      }
+      tryCatch({
+        e <- new.env()
+        load(system.file("app/data", paste0(fuente, ".rda"),
+                         package = "StatBayes"), envir = e)
+        df <- get(ls(e)[1], envir = e)
+        df |> dplyr::mutate(dplyr::across(where(is.character), as.factor))
+      }, error = function(err) {
+        showNotification(paste("Error al cargar dataset:", err$message),
+                         type = "error", duration = 6)
+        NULL
+      })
     })
 
     datos_mod <- reactiveVal(NULL)
@@ -1162,13 +1159,7 @@ mod_lm_bayes_server <- function(id) {
     # ── Info dataset ──────────────────────────────────
     output$info_dataset_lmb <- renderUI({
       fuente <- input$fuente_datos_lmb
-      if (is.null(fuente) || fuente == "propio") {
-        return(div(
-          class = "alert alert-info small py-2 px-3 mb-2",
-          bs_icon("info-circle-fill", class = "me-1"),
-          "Se mostrar\u00e1n los datos cargados."
-        ))
-      }
+      if (is.null(fuente)) return(NULL)
       switch(fuente,
         birdabundance_lm = div(
           class = "alert alert-info small py-2 px-3 mb-2",
@@ -1201,29 +1192,7 @@ mod_lm_bayes_server <- function(id) {
       )
     })
 
-    output$resumen_datos_lmb <- renderUI({
-      req(datos())
-      d <- datos()
-      nums <- sum(sapply(d, is.numeric))
-      cats <- sum(sapply(d, function(x) is.factor(x) || is.character(x)))
-      div(
-        class = "small text-muted",
-        bs_icon("123", class = "me-1"), strong(nums), " numéricas · ",
-        bs_icon("tag", class = "me-1"), strong(cats), " categóricas"
-      )
-    })
-
-    # ── Vista previa ──────────────────────────────────
-    output$tabla_preview_lmb <- renderDT({
-      req(datos())
-      datatable(
-        head(datos(), 8),
-        rownames = FALSE,
-        options  = list(dom = "t", scrollX = TRUE),
-        class    = "table-sm table-striped"
-      )
-    })
-
+    # ── Vista previa datos de ejemplo ────────────────
     output$cards_datos_lmb <- renderUI({
       req(datos())
       d    <- datos()
@@ -1231,28 +1200,91 @@ mod_lm_bayes_server <- function(id) {
       ncat <- sum(sapply(d, function(x) is.factor(x) || is.character(x)))
       layout_columns(
         col_widths = c(4, 4, 4),
-        card(
-          class = "text-center",
-          card_body(class = "p-2",
-                    h3(style = paste0("color:", colores$primario,
-                                      "; font-weight:700;"), nrow(d)),
-                    p(class = "small text-muted mb-0", "Observaciones"))
-        ),
-        card(
-          class = "text-center",
-          card_body(class = "p-2",
-                    h3(style = paste0("color:", colores$acento,
-                                      "; font-weight:700;"), nnum),
-                    p(class = "small text-muted mb-0", "Num\u00e9ricas"))
-        ),
-        card(
-          class = "text-center",
-          card_body(class = "p-2",
-                    h3(style = paste0("color:", colores$secundario,
-                                      "; font-weight:700;"), ncat),
-                    p(class = "small text-muted mb-0", "Categ\u00f3ricas"))
-        )
+        card(class = "text-center",
+             card_body(class = "p-2",
+               h3(style = paste0("color:", colores$primario, "; font-weight:700;"),
+                  nrow(d)),
+               p(class = "small text-muted mb-0", "Observaciones"))),
+        card(class = "text-center",
+             card_body(class = "p-2",
+               h3(style = paste0("color:", colores$acento, "; font-weight:700;"),
+                  nnum),
+               p(class = "small text-muted mb-0", "Num\u00e9ricas"))),
+        card(class = "text-center",
+             card_body(class = "p-2",
+               h3(style = paste0("color:", colores$secundario, "; font-weight:700;"),
+                  ncat),
+               p(class = "small text-muted mb-0", "Categ\u00f3ricas")))
       )
+    })
+
+    output$tabla_preview_lmb <- renderDT({
+      req(datos())
+      datatable(head(datos(), 8), rownames = FALSE,
+                options = list(dom = "t", scrollX = TRUE),
+                class = "table-sm table-striped")
+    })
+
+    # ── Datos propios ─────────────────────────────────
+    datos_propio_lmb <- reactive({
+      req(input$archivo_lmb)
+      ext <- tools::file_ext(input$archivo_lmb$name)
+      tryCatch({
+        df <- if (ext %in% c("xlsx", "xls"))
+          readxl::read_excel(input$archivo_lmb$datapath)
+        else
+          readr::read_delim(input$archivo_lmb$datapath,
+                            delim = input$separador_lmb %||% ",",
+                            show_col_types = FALSE)
+        df |> dplyr::mutate(dplyr::across(where(is.character), as.factor))
+      }, error = function(e) {
+        showNotification(paste("Error al leer archivo:", e$message),
+                         type = "error", duration = 6)
+        NULL
+      })
+    })
+
+    observeEvent(datos_propio_lmb(), { datos_mod(datos_propio_lmb()) })
+
+    output$resumen_datos_propio_lmb <- renderUI({
+      req(datos_propio_lmb())
+      d <- datos_propio_lmb()
+      div(class = "small text-muted",
+          bs_icon("check-circle-fill",
+                  style = paste0("color:", colores$exito), class = "me-1"),
+          paste0(nrow(d), " filas \u00b7 ", ncol(d), " columnas"))
+    })
+
+    output$cards_datos_propio_lmb <- renderUI({
+      req(datos_propio_lmb())
+      d    <- datos_propio_lmb()
+      nnum <- sum(sapply(d, is.numeric))
+      ncat <- sum(sapply(d, function(x) is.factor(x) || is.character(x)))
+      layout_columns(
+        col_widths = c(4, 4, 4),
+        card(class = "text-center",
+             card_body(class = "p-2",
+               h3(style = paste0("color:", colores$primario, "; font-weight:700;"),
+                  nrow(d)),
+               p(class = "small text-muted mb-0", "Observaciones"))),
+        card(class = "text-center",
+             card_body(class = "p-2",
+               h3(style = paste0("color:", colores$acento, "; font-weight:700;"),
+                  nnum),
+               p(class = "small text-muted mb-0", "Num\u00e9ricas"))),
+        card(class = "text-center",
+             card_body(class = "p-2",
+               h3(style = paste0("color:", colores$secundario, "; font-weight:700;"),
+                  ncat),
+               p(class = "small text-muted mb-0", "Categ\u00f3ricas")))
+      )
+    })
+
+    output$tabla_preview_propio_lmb <- renderDT({
+      req(datos_propio_lmb())
+      datatable(head(datos_propio_lmb(), 8), rownames = FALSE,
+                options = list(dom = "t", scrollX = TRUE),
+                class = "table-sm table-striped")
     })
 
     # ── Tipos de variables ────────────────────────────

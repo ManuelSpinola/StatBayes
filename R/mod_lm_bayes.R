@@ -1220,8 +1220,8 @@ mod_lm_bayes_server <- function(id) {
 
     output$tabla_preview_lmb <- renderDT({
       req(datos())
-      datatable(head(datos(), 8), rownames = FALSE,
-                options = list(dom = "t", scrollX = TRUE),
+      datatable(datos(), rownames = FALSE,
+                options = list(dom = "t", scrollY = "300px", scrollX = TRUE, paging = FALSE),
                 class = "table-sm table-striped")
     })
 
@@ -1282,8 +1282,8 @@ mod_lm_bayes_server <- function(id) {
 
     output$tabla_preview_propio_lmb <- renderDT({
       req(datos_propio_lmb())
-      datatable(head(datos_propio_lmb(), 8), rownames = FALSE,
-                options = list(dom = "t", scrollX = TRUE),
+      datatable(datos_propio_lmb(), rownames = FALSE,
+                options = list(dom = "t", scrollY = "300px", scrollX = TRUE, paging = FALSE),
                 class = "table-sm table-striped")
     })
 

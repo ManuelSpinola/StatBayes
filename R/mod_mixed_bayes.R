@@ -845,25 +845,69 @@ mod_mixed_bayes_server <- function(id) {
       if (is.null(fuente)) return(NULL)
       textos <- list(
         plantulas_lmm = tagList(
-          strong("Pl\u00e1ntulas en parcelas (LMM)."),
-          " Crecimiento de pl\u00e1ntulas en parcelas anidadas. ",
-          "Variable de agrupamiento: ", strong("parcela"), "."
+          strong("Pl\u00e1ntulas BTS \u2014 LMM (densidad continua)."),
+          " 60 parcelas en 10 fragmentos de bosque tropical seco, Costa Rica. ",
+          "Y: ", strong("densidad_plantulas"), " (ind/m\u00b2) \u2014 continua gaussiana. ",
+          "Predictores: cobertura_dosel (%), pendiente (\u00b0), dist_agua (m).",
+          tags$br(), tags$br(),
+          bs_icon("diagram-3", class = "me-1",
+                  style = paste0("color:", colores$primario)),
+          strong("Parametrizaci\u00f3n:"), " parcelas anidadas en fragmentos:", tags$br(),
+          tags$code("brm(densidad_plantulas ~ cobertura_dosel + pendiente +"),
+          tags$br(),
+          tags$code("      dist_agua + (1 | fragmento/parcela),"),
+          tags$br(),
+          tags$code("    family = gaussian())"), tags$br(),
+          "Estima variabilidad entre fragmentos y entre parcelas dentro de cada fragmento. ",
+          "Si el efecto del dosel var\u00eda entre fragmentos: ",
+          tags$code("(1 + cobertura_dosel | fragmento)"), "."
         ),
         sleepstudy_lmm = tagList(
-          strong("Sue\u00f1o y privaci\u00f3n (lme4::sleepstudy)."),
-          " Tiempo de reacci\u00f3n en ", strong("18 sujetos"),
-          " durante 10 d\u00edas de privaci\u00f3n de sue\u00f1o. ",
-          "Variable de agrupamiento: ", strong("Subject"), "."
+          strong("Privaci\u00f3n de sue\u00f1o \u2014 LMM (Belenky et al., 2003)."),
+          " 180 observaciones: 18 sujetos \u00d7 10 d\u00edas. ",
+          "Y: ", strong("Reaction"), " (ms) \u2014 continua. ",
+          "Predictor: Days. Agrupamiento: Subject.",
+          tags$br(), tags$br(),
+          bs_icon("diagram-3", class = "me-1",
+                  style = paste0("color:", colores$primario)),
+          strong("Parametrizaci\u00f3n:"), " ejemplo cl\u00e1sico de pendiente aleatoria:", tags$br(),
+          tags$code("brm(Reaction ~ Days + (1 + Days | Subject),"),
+          tags$br(),
+          tags$code("    family = gaussian())"), tags$br(),
+          "Cada sujeto tiene diferente tiempo base ", em("y"),
+          " diferente tasa de deterioro con la privaci\u00f3n de sue\u00f1o."
         ),
         aves_glmm = tagList(
-          strong("Abundancia de aves en sitios (GLMM)."),
-          " Conteos de aves en sitios repetidos. ",
-          "Variable de agrupamiento: ", strong("sitio"), "."
+          strong("Aves en fragmentos \u2014 GLMM Poisson/BN (simulado)."),
+          " 72 puntos de conteo (6 por fragmento) en 12 fragmentos. ",
+          "Y: ", strong("n_aves"), " (conteos). Offset: log(area_ha). ",
+          "Agrupamiento: fragmento.",
+          tags$br(), tags$br(),
+          bs_icon("diagram-3", class = "me-1",
+                  style = paste0("color:", colores$primario)),
+          strong("Parametrizaci\u00f3n:"), " puntos anidados en fragmentos:", tags$br(),
+          tags$code("brm(n_aves ~ cobertura_dosel + dist_borde + NDVI +"),
+          tags$br(),
+          tags$code("      offset(log(area_ha)) + (1 | fragmento),"),
+          tags$br(),
+          tags$code("    family = negbinomial())"), tags$br(),
+          "En brms se usa binomial negativa directamente \u2014 no existe quasipoisson ",
+          "en el mundo bayesiano."
         ),
         ranas_glmm = tagList(
-          strong("Presencia de ranas en sitios (GLMM log\u00edstico)."),
-          " Detecci\u00f3n/no detecci\u00f3n en sitios. ",
-          "Variable de agrupamiento: ", strong("sitio"), "."
+          strong("Ranas en charcas \u2014 GLMM binomial (simulado)."),
+          " 120 visitas (8 por charca) a 15 charcas temporales. ",
+          "Y: ", strong("presencia"), " (0/1). Agrupamiento: charca.",
+          tags$br(), tags$br(),
+          bs_icon("diagram-3", class = "me-1",
+                  style = paste0("color:", colores$primario)),
+          strong("Parametrizaci\u00f3n:"), " visitas repetidas a las mismas charcas:", tags$br(),
+          tags$code("brm(presencia ~ hidroperiodo + cobertura + dist_bosque + pH +"),
+          tags$br(),
+          tags$code("      (1 | charca), family = binomial())"), tags$br(),
+          "Si el efecto del pH var\u00eda entre charcas: ",
+          tags$code("(1 + pH | charca)"), ". ",
+          "Con solo 15 charcas, los priors bayesianos estabilizan mejor las estimaciones."
         )
       )
       info <- textos[[fuente]]
@@ -898,8 +942,8 @@ mod_mixed_bayes_server <- function(id) {
 
     output$tabla_preview_mxb <- renderDT({
       req(datos())
-      datatable(head(datos(), 8), rownames = FALSE,
-                options = list(dom = "t", scrollX = TRUE),
+      datatable(datos(), rownames = FALSE,
+                options = list(dom = "t", scrollY = "300px", scrollX = TRUE, paging = FALSE),
                 class = "table-sm table-striped")
     })
 
@@ -957,8 +1001,8 @@ mod_mixed_bayes_server <- function(id) {
 
     output$tabla_preview_propio_mxb <- renderDT({
       req(datos_propio_mxb())
-      datatable(head(datos_propio_mxb(), 8), rownames = FALSE,
-                options = list(dom = "t", scrollX = TRUE),
+      datatable(datos_propio_mxb(), rownames = FALSE,
+                options = list(dom = "t", scrollY = "300px", scrollX = TRUE, paging = FALSE),
                 class = "table-sm table-striped")
     })
 

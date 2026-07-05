@@ -908,8 +908,8 @@ mod_gam_bayes_server <- function(id) {
 
     output$tabla_preview_gamb <- renderDT({
       req(datos())
-      datatable(head(datos(), 8), rownames = FALSE,
-                options = list(dom = "t", scrollX = TRUE),
+      datatable(datos(), rownames = FALSE,
+                options = list(dom = "t", scrollY = "300px", scrollX = TRUE, paging = FALSE),
                 class = "table-sm table-striped")
     })
 
@@ -967,8 +967,8 @@ mod_gam_bayes_server <- function(id) {
 
     output$tabla_preview_propio_gamb <- renderDT({
       req(datos_propio_gamb())
-      datatable(head(datos_propio_gamb(), 8), rownames = FALSE,
-                options = list(dom = "t", scrollX = TRUE),
+      datatable(datos_propio_gamb(), rownames = FALSE,
+                options = list(dom = "t", scrollY = "300px", scrollX = TRUE, paging = FALSE),
                 class = "table-sm table-striped")
     })
 
@@ -1191,18 +1191,28 @@ mod_gam_bayes_server <- function(id) {
         binomial    = div(class = "alert alert-info small py-2 px-3 mt-2 mb-0",
                           bs_icon("info-circle", class = "me-1"),
                           "Y binaria (0/1). Los splines operan en escala logit. ",
-                          "exp(\u03b2) = OR para efectos lineales."),
+                          "exp(\u03b2) = odds ratio (OR) para efectos lineales."),
         poisson     = div(class = "alert alert-info small py-2 px-3 mt-2 mb-0",
                           bs_icon("info-circle", class = "me-1"),
-                          "Y = conteos. Los splines operan en escala log. ",
-                          "exp(\u03b2) = IRR para efectos lineales."),
+                          "Y = conteos (0, 1, 2\u2026). Los splines operan en escala log. ",
+                          "exp(\u03b2) = raz\u00f3n de tasas (IRR) para efectos lineales. ",
+                          "Asume varianza = media."),
         negbinomial = div(class = "alert alert-info small py-2 px-3 mt-2 mb-0",
                           bs_icon("info-circle", class = "me-1"),
-                          "Conteos con sobredispersi\u00f3n. ",
-                          "Igual que Poisson pero con par\u00e1metro de forma."),
+                          "Conteos sobredispersados. Los splines operan en escala log. ",
+                          "exp(\u03b2) = IRR para efectos lineales. ",
+                          "Par\u00e1metro de forma \u03b8 estimado autom\u00e1ticamente. ",
+                          "En el mundo bayesiano no existe quasipoisson \u2014 la binomial ",
+                          "negativa es la alternativa m\u00e1s rigurosa porque es una ",
+                          "distribuci\u00f3n probabil\u00edstica real."),
         beta        = div(class = "alert alert-info small py-2 px-3 mt-2 mb-0",
                           bs_icon("info-circle", class = "me-1"),
-                          "Y en (0,1). Los splines modelan proporciones en escala logit.")
+                          "Y = proporciones en el intervalo abierto (0, 1). ",
+                          strong("Sin ceros ni unos exactos:"),
+                          " la distribuci\u00f3n Beta no est\u00e1 definida en los extremos. ",
+                          "Si tienes valores de exactamente 0 o 1, usa una ",
+                          strong("Beta inflada en cero/uno"), ". ",
+                          "Los splines operan en escala logit.")
       )
     })
 

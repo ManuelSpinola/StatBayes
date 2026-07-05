@@ -995,8 +995,8 @@ mod_glm_bayes_server <- function(id) {
 
     output$tabla_preview_glmb <- renderDT({
       req(datos())
-      datatable(head(datos(), 8), rownames=FALSE,
-                options=list(dom="t", scrollX=TRUE),
+      datatable(datos(), rownames=FALSE,
+                options = list(dom = "t", scrollY = "300px", scrollX = TRUE, paging = FALSE),
                 class="table-sm table-striped")
     })
 
@@ -1051,8 +1051,8 @@ mod_glm_bayes_server <- function(id) {
 
     output$tabla_preview_propio_glmb <- renderDT({
       req(datos_propio())
-      datatable(head(datos_propio(), 8), rownames=FALSE,
-                options=list(dom="t", scrollX=TRUE),
+      datatable(datos_propio(), rownames=FALSE,
+                options = list(dom = "t", scrollY = "300px", scrollX = TRUE, paging = FALSE),
                 class="table-sm table-striped")
     })
 

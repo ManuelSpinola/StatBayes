@@ -6,8 +6,8 @@ Authors@R:
     person(given = "Manuel",
            family = "Spinola",
            role = c("aut", "cre"),
-           email = "manuel.spinola@una.ac.cr",
-           comment = c(ORCID = ""))
+           email = "mspinola10@gmail.com",
+           comment = c(ORCID = "0000-0002-7839-1908"))
 Description: An interactive and didactic Shiny application for applied Bayesian
     analysis using brms. Covers prior distributions, Bayesian linear and
     generalized regression, generalized additive models, mixed models, MCMC

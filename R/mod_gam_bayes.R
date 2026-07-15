@@ -24,25 +24,26 @@ mod_gam_bayes_ui <- function(id) {
 
   tagList(
 
-    div(
-      class = "py-3 px-2",
-      h4(bs_icon("bezier2", class = "me-2"), "GAM bayesiano",
-         style = paste0("color:", colores$primario, "; font-weight:700;")),
-      p(class = "text-muted mb-0",
-        "Versi\u00f3n bayesiana del modelo aditivo generalizado. ",
-        "Usa la misma sintaxis de splines ", tags$code("s()"),
-        " que mgcv, pero ajustada con MCMC via Stan (brms). ",
-        "Distribuciones posteriores completas para cada curva suavizada.")
-    ),
-
     navset_card_tab(
 
       # ════════════════════════════════════════════════
       # PESTAÑA 1: ¿Qué es?
       # ════════════════════════════════════════════════
       nav_panel(
+        fillable = FALSE,
         title = tagList(bs_icon("book", class = "me-1"), "\u00bfQu\u00e9 es?"),
         card_body(
+
+          div(
+            class = "px-1 pb-2",
+            h4(bs_icon("bezier2", class = "me-2"), "GAM bayesiano",
+               style = paste0("color:", colores$primario, "; font-weight:700;")),
+            p(class = "text-muted mb-0",
+              "Versi\u00f3n bayesiana del modelo aditivo generalizado. ",
+              "Usa la misma sintaxis de splines ", tags$code("s()"),
+              " que mgcv, pero ajustada con MCMC via Stan (brms). ",
+              "Distribuciones posteriores completas para cada curva suavizada.")
+          ),
 
           h5(style = paste0("color:", colores$primario, "; font-weight:700;"),
              "Del GAM frecuentista al GAM bayesiano"),
@@ -56,6 +57,7 @@ mod_gam_bayes_ui <- function(id) {
 
           layout_columns(col_widths = c(6, 6),
             card(
+              fill = FALSE,
               card_header(bs_icon("arrow-left-right", class = "me-1"),
                           "Comparaci\u00f3n de enfoques"),
               card_body(
@@ -88,6 +90,7 @@ mod_gam_bayes_ui <- function(id) {
               )
             ),
             card(
+              fill = FALSE,
               card_header(bs_icon("question-circle", class = "me-1"),
                           "\u00bfCu\u00e1ndo usar el GAM bayesiano?"),
               card_body(
@@ -144,6 +147,7 @@ mod_gam_bayes_ui <- function(id) {
       # PESTAÑA 2: Fundamentos
       # ════════════════════════════════════════════════
       nav_panel(
+        fillable = FALSE,
         title = tagList(bs_icon("journal-bookmark", class = "me-1"),
                         "Fundamentos"),
         card_body(
@@ -250,10 +254,12 @@ mod_gam_bayes_ui <- function(id) {
       # PESTAÑA 3: Los datos
       # ════════════════════════════════════════════════
       nav_panel(
+        fillable = FALSE,
         title = tagList(bs_icon("table", class = "me-1"), "Los datos"),
         card_body(navset_pill(
 
           nav_panel(
+            fillable = FALSE,
             title = tagList(bs_icon("collection", class = "me-1"),
                             "Datos de ejemplo"),
             br(),
@@ -276,6 +282,7 @@ mod_gam_bayes_ui <- function(id) {
                 uiOutput(ns("info_dataset_gamb"))
               ),
               card(
+                fill = FALSE,
                 card_header(bs_icon("eye", class = "me-1"), "Vista previa"),
                 card_body(style = "overflow:auto;",
                   uiOutput(ns("cards_datos_gamb")), br(),
@@ -286,6 +293,7 @@ mod_gam_bayes_ui <- function(id) {
           ),
 
           nav_panel(
+            fillable = FALSE,
             title = tagList(bs_icon("folder2-open", class = "me-1"),
                             "Mis datos"),
             br(),
@@ -307,6 +315,7 @@ mod_gam_bayes_ui <- function(id) {
                 uiOutput(ns("resumen_datos_propio_gamb"))
               ),
               card(
+                fill = FALSE,
                 card_header(bs_icon("eye", class = "me-1"), "Vista previa"),
                 card_body(style = "overflow:auto;",
                   uiOutput(ns("cards_datos_propio_gamb")), br(),
@@ -317,6 +326,7 @@ mod_gam_bayes_ui <- function(id) {
           ),
 
           nav_panel(
+            fillable = FALSE,
             title = tagList(bs_icon("sliders2", class = "me-1"),
                             "Tipos de variables"),
             br(),
@@ -360,6 +370,7 @@ mod_gam_bayes_ui <- function(id) {
       # PESTAÑA 4: Explorar
       # ════════════════════════════════════════════════
       nav_panel(
+        fillable = FALSE,
         title = tagList(bs_icon("zoom-in", class = "me-1"), "Explorar"),
         card_body(
           p(class = "small text-muted mb-3",
@@ -368,6 +379,7 @@ mod_gam_bayes_ui <- function(id) {
             "es claramente no lineal (curva, unimodal, con umbral)."),
           layout_columns(col_widths = c(4, 8), fill = FALSE,
             card(
+              fill = FALSE,
               card_header(bs_icon("sliders", class = "me-1"), "Controles"),
               card_body(
                 uiOutput(ns("sel_var_x_gamb")),
@@ -388,6 +400,7 @@ mod_gam_bayes_ui <- function(id) {
       # PESTAÑA 5: Priors
       # ════════════════════════════════════════════════
       nav_panel(
+        fillable = FALSE,
         title = tagList(bs_icon("sliders", class = "me-1"), "Priors"),
         card_body(
           p(class = "small text-muted mb-3",
@@ -398,6 +411,7 @@ mod_gam_bayes_ui <- function(id) {
             "Un prior m\u00e1s estrecho produce curvas m\u00e1s suaves."),
           layout_columns(col_widths = c(4, 8),
             card(
+              fill = FALSE,
               card_header(bs_icon("gear", class = "me-1"),
                           "Configuraci\u00f3n de priors"),
               card_body(
@@ -465,10 +479,12 @@ mod_gam_bayes_ui <- function(id) {
       # PESTAÑA 6: Ajustar modelo
       # ════════════════════════════════════════════════
       nav_panel(
+        fillable = FALSE,
         title = tagList(bs_icon("gear", class = "me-1"), "Ajustar modelo"),
         card_body(
           layout_columns(col_widths = c(4, 8),
             card(
+              fill = FALSE,
               card_header(bs_icon("toggles", class = "me-1"),
                           "Especificar el modelo"),
               card_body(
@@ -530,6 +546,7 @@ mod_gam_bayes_ui <- function(id) {
               uiOutput(ns("cards_metricas_gamb")), br(),
               layout_columns(col_widths = c(6, 6),
                 card(
+                  fill = FALSE,
                   card_header(bs_icon("bullseye", class = "me-1"),
                               "Predichos vs. observados"),
                   card_body(
@@ -539,6 +556,7 @@ mod_gam_bayes_ui <- function(id) {
                   )
                 ),
                 card(
+                  fill = FALSE,
                   card_header(bs_icon("code-slash", class = "me-1"),
                               "F\u00f3rmula ajustada"),
                   card_body(verbatimTextOutput(ns("formula_ajustada_gamb")))
@@ -553,6 +571,7 @@ mod_gam_bayes_ui <- function(id) {
       # PESTAÑA 7: Diagnóstico MCMC
       # ════════════════════════════════════════════════
       nav_panel(
+        fillable = FALSE,
         title = tagList(bs_icon("activity", class = "me-1"),
                         "Diagn\u00f3stico MCMC"),
         card_body(
@@ -563,12 +582,13 @@ mod_gam_bayes_ui <- function(id) {
             "la convergencia de todos los t\u00e9rminos."),
           layout_columns(col_widths = c(4, 8),
             card(
+              fill = FALSE,
               card_header(bs_icon("stopwatch", class = "me-1"),
                           "Diagn\u00f3stico de convergencia"),
               card_body(uiOutput(ns("semaforo_mcmc_gamb")))
             ),
             div(navset_pill(
-              nav_panel(title = "Traceplots", br(),
+              nav_panel(title = "Traceplots", fillable = FALSE, br(),
                 p(class = "small text-muted mb-2",
                   "Las cadenas deben mezclarse como ",
                   strong("orugas peludas"), " superpuestas."),
@@ -576,17 +596,17 @@ mod_gam_bayes_ui <- function(id) {
                             choices = NULL),
                 plotOutput(ns("plot_trace_gamb"), height = "280px")
               ),
-              nav_panel(title = "Densidades", br(),
+              nav_panel(title = "Densidades", fillable = FALSE, br(),
                 p(class = "small text-muted mb-2",
                   "Las densidades de las cadenas deben superponerse."),
                 plotOutput(ns("plot_dens_mcmc_gamb"), height = "280px")
               ),
-              nav_panel(title = "Posterior predictive check", br(),
+              nav_panel(title = "Posterior predictive check", fillable = FALSE, br(),
                 p(class = "small text-muted mb-2",
                   "Datos observados (l\u00ednea oscura) vs. r\u00e9plicas del posterior."),
                 plotOutput(ns("plot_ppc_post_gamb"), height = "280px")
               ),
-              nav_panel(title = "R\u0302 y ESS", br(),
+              nav_panel(title = "R\u0302 y ESS", fillable = FALSE, br(),
                 div(class = "alert alert-info small mb-3",
                   bs_icon("info-circle", class = "me-1"),
                   strong("Nota sobre splines:"), " los t\u00e9rminos suaves generan ",
@@ -604,6 +624,7 @@ mod_gam_bayes_ui <- function(id) {
       # PESTAÑA 8: Performance
       # ════════════════════════════════════════════════
       nav_panel(
+        fillable = FALSE,
         title = tagList(bs_icon("speedometer2", class = "me-1"), "Performance"),
         card_body(
           p(class = "small text-muted mb-3",
@@ -611,6 +632,7 @@ mod_gam_bayes_ui <- function(id) {
             "LOO y WAIC permiten comparar modelos con y sin t\u00e9rminos suaves."),
           layout_columns(col_widths = c(6, 6),
             card(
+              fill = FALSE,
               card_header(bs_icon("speedometer2", class = "me-1"),
                           "M\u00e9tricas del modelo",
                           span(class = "text-muted small ms-2",
@@ -649,6 +671,7 @@ mod_gam_bayes_ui <- function(id) {
       # PESTAÑA 9: Parámetros
       # ════════════════════════════════════════════════
       nav_panel(
+        fillable = FALSE,
         title = tagList(bs_icon("table", class = "me-1"), "Par\u00e1metros"),
         div(class = "p-3",
           p(class = "small text-muted mb-3",
@@ -658,6 +681,7 @@ mod_gam_bayes_ui <- function(id) {
             "mejor en la pesta\u00f1a ", strong("Gr\u00e1ficos"), "."),
           layout_columns(col_widths = c(6, 6), fill = FALSE,
             card(
+              fill = FALSE,
               card_header(bs_icon("layout-text-sidebar", class = "me-1"),
                           "Tabla de coeficientes",
                           span(class = "text-muted small ms-2",
@@ -666,6 +690,7 @@ mod_gam_bayes_ui <- function(id) {
                 uiOutput(ns("tabla_params_ui_gamb")))
             ),
             card(
+              fill = FALSE,
               card_header(bs_icon("bar-chart-fill", class = "me-1"),
                           "Forest plot",
                           span(class = "text-muted small ms-2",
@@ -680,6 +705,7 @@ mod_gam_bayes_ui <- function(id) {
           ),
           div(class = "mt-3",
             card(
+              fill = FALSE,
               card_header(bs_icon("bar-chart-steps", class = "me-1"),
                           "Importancia de variables",
                           span(class = "text-muted small ms-2",
@@ -698,25 +724,26 @@ mod_gam_bayes_ui <- function(id) {
       # PESTAÑA 10: Gráficos
       # ════════════════════════════════════════════════
       nav_panel(
+        fillable = FALSE,
         title = tagList(bs_icon("graph-up-arrow", class = "me-1"),
                         "Gr\u00e1ficos"),
         card_body(navset_pill(
-          nav_panel(title = "Curvas suavizadas", br(),
+          nav_panel(title = "Curvas suavizadas", fillable = FALSE, br(),
             p(class = "small text-muted mb-3",
               "Curvas suavizadas posteriores para cada t\u00e9rmino ",
               tags$code("s()"), ". La banda sombreada es el IC credible 95%. ",
               "Cada curva representa el efecto parcial del predictor."),
             plotOutput(ns("plot_smooth_gamb"), height = "400px")
           ),
-          nav_panel(title = "Distribuciones posteriores", br(),
+          nav_panel(title = "Distribuciones posteriores", fillable = FALSE, br(),
             p(class = "small text-muted mb-3",
               "Distribuci\u00f3n posterior de los efectos lineales."),
             plotOutput(ns("plot_areas_gamb"), height = "380px")
           ),
-          nav_panel(title = "Predicho vs. observado", br(),
+          nav_panel(title = "Predicho vs. observado", fillable = FALSE, br(),
             plotOutput(ns("plot_predobs_graf_gamb"), height = "380px")
           ),
-          nav_panel(title = "Residuos", br(),
+          nav_panel(title = "Residuos", fillable = FALSE, br(),
             plotOutput(ns("plot_resid_gamb"), height = "380px")
           )
         ))
@@ -726,6 +753,7 @@ mod_gam_bayes_ui <- function(id) {
       # PESTAÑA 11: Efectos marginales
       # ════════════════════════════════════════════════
       nav_panel(
+        fillable = FALSE,
         title = tagList(bs_icon("arrows-angle-expand", class = "me-1"),
                         "Efectos marginales"),
         card_body(
@@ -735,6 +763,7 @@ mod_gam_bayes_ui <- function(id) {
             "posterior con IC credible 95%."),
           layout_columns(col_widths = c(4, 8),
             card(
+              fill = FALSE,
               card_header(bs_icon("sliders", class = "me-1"), "Controles"),
               card_body(
                 uiOutput(ns("sel_pred_marginal_gamb")),
@@ -747,6 +776,7 @@ mod_gam_bayes_ui <- function(id) {
             ),
             div(
               card(
+                fill = FALSE,
                 card_header(bs_icon("graph-up-arrow", class = "me-1"),
                             "Efecto marginal posterior"),
                 card_body(plotOutput(ns("plot_marginal_gamb"), height = "380px"))
@@ -762,6 +792,7 @@ mod_gam_bayes_ui <- function(id) {
       # PESTAÑA 12: Comparar modelos
       # ════════════════════════════════════════════════
       nav_panel(
+        fillable = FALSE,
         title = tagList(bs_icon("arrow-left-right", class = "me-1"),
                         "Comparar modelos"),
         card_body(
@@ -777,6 +808,7 @@ mod_gam_bayes_ui <- function(id) {
             "Si LOO no mejora, la relaci\u00f3n es suficientemente lineal."),
           layout_columns(col_widths = c(4, 8),
             card(
+              fill = FALSE,
               card_header(bs_icon("list-check", class = "me-1"),
                           "Modelos guardados"),
               card_body(
@@ -812,12 +844,14 @@ mod_gam_bayes_ui <- function(id) {
       # PESTAÑA 13: Código R
       # ════════════════════════════════════════════════
       nav_panel(
+        fillable = FALSE,
         title = tagList(bs_icon("code-slash", class = "me-1"), "C\u00f3digo R"),
         card_body(
           p(class = "text-muted small mb-3",
             "Script reproducible con ", strong("brms"),
             ". Se actualiza seg\u00fan las selecciones activas."),
           card(
+            fill = FALSE,
             card_header(
               class = "d-flex justify-content-between align-items-center",
               tagList(bs_icon("code-slash"), " Script reproducible"),

@@ -1507,7 +1507,7 @@ mod_lm_bayes_server <- function(id) {
         div(class = "alert alert-info small py-2 px-3 mb-0",
             bs_icon("info-circle", class = "me-1"),
             paste0(n_na, " fila(s) con NA. El modelo puede fallar o excluirlas ",
-                   "autom\u00e1ticamente \u2014 pod\u00e9s eliminarlas arriba para mayor control."))
+                   "autom\u00e1ticamente \u2014 pod\u00e9s eliminarlas a la izquierda para mayor control."))
     })
 
     # ── Exploración ───────────────────────────────────

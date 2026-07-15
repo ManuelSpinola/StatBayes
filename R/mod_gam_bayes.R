@@ -335,7 +335,23 @@ mod_gam_bayes_ui <- function(id) {
                              icon = icon("rotate-left"))
               )
             ),
-            uiOutput(ns("tipos_aplicados_msg_gamb"))
+            uiOutput(ns("tipos_aplicados_msg_gamb")),
+
+            tags$hr(),
+            layout_columns(
+              col_widths = c(4, 8),
+              radioButtons(
+                ns("manejo_na_gamb"),
+                label    = tagList(bs_icon("exclamation-diamond", class = "me-1"),
+                                   "Valores perdidos (NA)"),
+                choices  = c(
+                  "Conservar"             = "conservar",
+                  "Eliminar filas con NA" = "eliminar"
+                ),
+                selected = "conservar"
+              ),
+              uiOutput(ns("na_info_gamb"))
+            )
           )
         ))
       ),
@@ -1055,14 +1071,45 @@ mod_gam_bayes_server <- function(id) {
       tipos_usuario_gamb(NULL); datos_mod(datos())
     })
 
+    # ── Manejo de NAs ────────────────────────────────────────────────────────
+    datos_finales_gamb <- reactive({
+      df <- datos_mod()
+      req(df)
+      if (isTRUE(input$manejo_na_gamb == "eliminar")) {
+        df <- tidyr::drop_na(df)
+      }
+      df
+    })
+
+    output$na_info_gamb <- renderUI({
+      df_orig  <- datos_mod()
+      df_final <- datos_finales_gamb()
+      req(df_orig)
+      n_na <- sum(!stats::complete.cases(df_orig))
+      if (n_na == 0) return(
+        div(class = "alert alert-success small py-2 px-3 mb-0",
+            bs_icon("check-circle", class = "me-1"), "Sin valores perdidos.")
+      )
+      n_elim <- nrow(df_orig) - nrow(df_final)
+      if (input$manejo_na_gamb == "eliminar")
+        div(class = "alert alert-warning small py-2 px-3 mb-0",
+            bs_icon("exclamation-triangle", class = "me-1"),
+            paste0(n_elim, " fila(s) eliminadas. Quedan ", nrow(df_final), " filas."))
+      else
+        div(class = "alert alert-info small py-2 px-3 mb-0",
+            bs_icon("info-circle", class = "me-1"),
+            paste0(n_na, " fila(s) con NA. El modelo puede fallar o excluirlas ",
+                   "autom\u00e1ticamente \u2014 pod\u00e9s eliminarlas arriba para mayor control."))
+    })
+
     # ── Variables reactivas ───────────────────────────
     vars_num <- reactive({
-      req(datos_mod())
-      names(which(sapply(datos_mod(), is.numeric)))
+      req(datos_finales_gamb())
+      names(which(sapply(datos_finales_gamb(), is.numeric)))
     })
     vars_cat <- reactive({
-      req(datos_mod())
-      names(which(sapply(datos_mod(),
+      req(datos_finales_gamb())
+      names(which(sapply(datos_finales_gamb(),
                          function(x) is.factor(x) || is.character(x))))
     })
 
@@ -1081,8 +1128,8 @@ mod_gam_bayes_server <- function(id) {
     })
 
     output$plot_scatter_gamb <- renderPlot({
-      req(datos_mod(), input$var_x_gamb, input$var_y_exp_gamb)
-      d <- datos_mod()
+      req(datos_finales_gamb(), input$var_x_gamb, input$var_y_exp_gamb)
+      d <- datos_finales_gamb()
       x <- input$var_x_gamb; y <- input$var_y_exp_gamb
       req(x %in% names(d), y %in% names(d))
       p <- ggplot(d, aes(.data[[x]], as.numeric(.data[[y]]))) +
@@ -1103,8 +1150,8 @@ mod_gam_bayes_server <- function(id) {
     })
 
     output$sugerencia_no_lineal_gamb <- renderUI({
-      req(datos_mod(), input$var_x_gamb, input$var_y_exp_gamb)
-      d <- datos_mod()
+      req(datos_finales_gamb(), input$var_x_gamb, input$var_y_exp_gamb)
+      d <- datos_finales_gamb()
       x <- input$var_x_gamb; y <- input$var_y_exp_gamb
       if (!x %in% names(d) || !y %in% names(d) ||
           !is.numeric(d[[x]]) || !is.numeric(d[[y]])) return(NULL)
@@ -1148,7 +1195,7 @@ mod_gam_bayes_server <- function(id) {
     })
 
     observeEvent(input$ver_ppc_gamb, {
-      req(datos_mod())
+      req(datos_finales_gamb())
       n <- 100; x <- seq(0, 1, length.out = 50)
       mat <- replicate(n, {
         b0 <- rnorm(1, input$prior_intercept_mu_gamb,
@@ -1287,10 +1334,10 @@ mod_gam_bayes_server <- function(id) {
     })
 
     observeEvent(input$ajustar_gamb, {
-      req(datos_mod(), input$var_y_gamb)
+      req(datos_finales_gamb(), input$var_y_gamb)
       frm <- tryCatch(formula_gamb(), error = function(e) NULL)
       req(frm)
-      d   <- datos_mod()
+      d   <- datos_finales_gamb()
       withProgress(message = "Ajustando GAM bayesiano (MCMC)\u2026",
                    detail = "Puede tardar varios minutos.", value = 0.1, {
         tryCatch({

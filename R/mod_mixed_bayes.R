@@ -350,7 +350,23 @@ mod_mixed_bayes_ui <- function(id) {
                              icon = icon("rotate-left"))
               )
             ),
-            uiOutput(ns("tipos_aplicados_msg_mxb"))
+            uiOutput(ns("tipos_aplicados_msg_mxb")),
+
+            tags$hr(),
+            layout_columns(
+              col_widths = c(4, 8),
+              radioButtons(
+                ns("manejo_na_mxb"),
+                label    = tagList(bs_icon("exclamation-diamond", class = "me-1"),
+                                   "Valores perdidos (NA)"),
+                choices  = c(
+                  "Conservar"             = "conservar",
+                  "Eliminar filas con NA" = "eliminar"
+                ),
+                selected = "conservar"
+              ),
+              uiOutput(ns("na_info_mxb"))
+            )
           )
         ))
       ),
@@ -1089,14 +1105,45 @@ mod_mixed_bayes_server <- function(id) {
       tipos_usuario_mxb(NULL); datos_mod(datos())
     })
 
+    # ── Manejo de NAs ────────────────────────────────────────────────────────
+    datos_finales_mxb <- reactive({
+      df <- datos_mod()
+      req(df)
+      if (isTRUE(input$manejo_na_mxb == "eliminar")) {
+        df <- tidyr::drop_na(df)
+      }
+      df
+    })
+
+    output$na_info_mxb <- renderUI({
+      df_orig  <- datos_mod()
+      df_final <- datos_finales_mxb()
+      req(df_orig)
+      n_na <- sum(!stats::complete.cases(df_orig))
+      if (n_na == 0) return(
+        div(class = "alert alert-success small py-2 px-3 mb-0",
+            bs_icon("check-circle", class = "me-1"), "Sin valores perdidos.")
+      )
+      n_elim <- nrow(df_orig) - nrow(df_final)
+      if (input$manejo_na_mxb == "eliminar")
+        div(class = "alert alert-warning small py-2 px-3 mb-0",
+            bs_icon("exclamation-triangle", class = "me-1"),
+            paste0(n_elim, " fila(s) eliminadas. Quedan ", nrow(df_final), " filas."))
+      else
+        div(class = "alert alert-info small py-2 px-3 mb-0",
+            bs_icon("info-circle", class = "me-1"),
+            paste0(n_na, " fila(s) con NA. El modelo puede fallar o excluirlas ",
+                   "autom\u00e1ticamente \u2014 pod\u00e9s eliminarlas arriba para mayor control."))
+    })
+
     # ── Variables reactivas ───────────────────────────
     vars_num <- reactive({
-      req(datos_mod())
-      names(which(sapply(datos_mod(), is.numeric)))
+      req(datos_finales_mxb())
+      names(which(sapply(datos_finales_mxb(), is.numeric)))
     })
     vars_cat <- reactive({
-      req(datos_mod())
-      names(which(sapply(datos_mod(),
+      req(datos_finales_mxb())
+      names(which(sapply(datos_finales_mxb(),
                          function(x) is.factor(x) || is.character(x))))
     })
 
@@ -1114,8 +1161,8 @@ mod_mixed_bayes_server <- function(id) {
     })
 
     output$n_grupos_mxb <- renderUI({
-      req(datos_mod(), input$var_grupo_exp_mxb)
-      d <- datos_mod(); g <- input$var_grupo_exp_mxb
+      req(datos_finales_mxb(), input$var_grupo_exp_mxb)
+      d <- datos_finales_mxb(); g <- input$var_grupo_exp_mxb
       if (!g %in% names(d)) return(NULL)
       n_grupos <- length(unique(d[[g]]))
       clase <- if (n_grupos < 5) "sem-warn"
@@ -1130,8 +1177,8 @@ mod_mixed_bayes_server <- function(id) {
     })
 
     output$plot_scatter_mxb <- renderPlot({
-      req(datos_mod(), input$var_x_mxb, input$var_y_exp_mxb)
-      d <- datos_mod()
+      req(datos_finales_mxb(), input$var_x_mxb, input$var_y_exp_mxb)
+      d <- datos_finales_mxb()
       x <- input$var_x_mxb; y <- input$var_y_exp_mxb
       g <- input$var_grupo_exp_mxb
       req(x %in% names(d), y %in% names(d))
@@ -1186,7 +1233,7 @@ mod_mixed_bayes_server <- function(id) {
     })
 
     observeEvent(input$ver_ppc_mxb, {
-      req(datos_mod())
+      req(datos_finales_mxb())
       n_grupos <- 10; n_obs <- 20; n_sim <- 100
       mat <- replicate(n_sim, {
         b0   <- rnorm(1, input$prior_intercept_mu_mxb,
@@ -1341,10 +1388,10 @@ mod_mixed_bayes_server <- function(id) {
     })
 
     observeEvent(input$ajustar_mxb, {
-      req(datos_mod(), input$var_y_mxb, input$var_grupo_mod_mxb)
+      req(datos_finales_mxb(), input$var_y_mxb, input$var_grupo_mod_mxb)
       frm <- tryCatch(formula_mxb(), error = function(e) NULL)
       req(frm)
-      d <- datos_mod()
+      d <- datos_finales_mxb()
       withProgress(message = "Ajustando modelo mixto bayesiano (MCMC)\u2026",
                    detail = "Puede tardar varios minutos.", value = 0.1, {
         tryCatch({

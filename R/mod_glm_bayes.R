@@ -8,23 +8,24 @@ mod_glm_bayes_ui <- function(id) {
 
   tagList(
 
-    div(
-      class = "py-3 px-2",
-      h4(bs_icon("toggles", class = "me-2"), "GLM bayesiano",
-         style = paste0("color:", colores$primario, "; font-weight:700;")),
-      p(class = "text-muted mb-0",
-        "Versi\u00f3n bayesiana del modelo lineal generalizado. ",
-        "Cubre binomial, Poisson, binomial negativa, Beta y modelos zero-inflated.")
-    ),
-
     navset_card_tab(
 
       # ════════════════════════════════════════════════
       # PESTAÑA 1: ¿Qué es?
       # ════════════════════════════════════════════════
       nav_panel(
+        fillable = FALSE,
         title = tagList(bs_icon("book", class = "me-1"), "\u00bfQu\u00e9 es?"),
         card_body(
+
+          div(
+            class = "px-1 pb-2",
+            h4(bs_icon("toggles", class = "me-2"), "GLM bayesiano",
+               style = paste0("color:", colores$primario, "; font-weight:700;")),
+            p(class = "text-muted mb-0",
+              "Versi\u00f3n bayesiana del modelo lineal generalizado. ",
+              "Cubre binomial, Poisson, binomial negativa, Beta y modelos zero-inflated.")
+          ),
 
           h5(style = paste0("color:", colores$primario, "; font-weight:700;"),
              "Del GLM frecuentista al GLM bayesiano"),
@@ -106,7 +107,7 @@ mod_glm_bayes_ui <- function(id) {
 
           h5(style = paste0("color:", colores$primario, "; font-weight:700;"),
              "La funci\u00f3n de enlace"),
-          layout_columns(col_widths = c(4, 4, 4),
+          layout_columns(col_widths = c(4, 4, 4), fill = FALSE,
             div(class="card-muestreo",
               style=paste0("border-left:4px solid ",colores$primario,";"),
               p(class="small mb-1", strong("Enlace logit \u2014 Binomial / Beta")),
@@ -135,7 +136,7 @@ mod_glm_bayes_ui <- function(id) {
 
           h5(style = paste0("color:", colores$primario, "; font-weight:700;"),
              "\u00bfCu\u00e1ndo ir m\u00e1s all\u00e1 del GLM bayesiano?"),
-          layout_columns(col_widths = c(4, 4, 4),
+          layout_columns(col_widths = c(4, 4, 4), fill = FALSE,
             div(class="alert alert-warning small py-2 px-3 mb-0",
               bs_icon("x-circle-fill", class="me-2",
                 style=paste0("color:",colores$peligro)),
@@ -160,6 +161,7 @@ mod_glm_bayes_ui <- function(id) {
       # PESTAÑA 2: Fundamentos
       # ════════════════════════════════════════════════
       nav_panel(
+        fillable = FALSE,
         title = tagList(bs_icon("journal-bookmark", class="me-1"), "Fundamentos"),
         card_body(
           h5(style=paste0("color:",colores$primario,"; font-weight:700;"),
@@ -270,11 +272,13 @@ mod_glm_bayes_ui <- function(id) {
       # PESTAÑA 3: Los datos
       # ════════════════════════════════════════════════
       nav_panel(
+        fillable = FALSE,
         title = tagList(bs_icon("table", class="me-1"), "Los datos"),
         card_body(navset_pill(
 
           # ── Sub 1: Datos de ejemplo ─────────────────
           nav_panel(
+            fillable = FALSE,
             title = tagList(bs_icon("collection", class="me-1"),
                             "Datos de ejemplo"),
             br(),
@@ -300,6 +304,7 @@ mod_glm_bayes_ui <- function(id) {
                 uiOutput(ns("resumen_datos_glmb"))
               ),
               card(
+                fill = FALSE,
                 card_header(bs_icon("eye", class="me-1"), "Vista previa"),
                 card_body(style="overflow:auto;",
                   uiOutput(ns("cards_datos_glmb")), br(),
@@ -311,6 +316,7 @@ mod_glm_bayes_ui <- function(id) {
 
           # ── Sub 2: Mis datos ─────────────────────────
           nav_panel(
+            fillable = FALSE,
             title = tagList(bs_icon("folder2-open", class="me-1"),
                             "Mis datos"),
             br(),
@@ -336,6 +342,7 @@ mod_glm_bayes_ui <- function(id) {
                 uiOutput(ns("resumen_datos_propio_glmb"))
               ),
               card(
+                fill = FALSE,
                 card_header(bs_icon("eye", class="me-1"), "Vista previa"),
                 card_body(style="overflow:auto;",
                   uiOutput(ns("cards_datos_propio_glmb")), br(),
@@ -347,6 +354,7 @@ mod_glm_bayes_ui <- function(id) {
 
           # ── Sub 3: Tipos de variables ────────────────
           nav_panel(
+            fillable = FALSE,
             title = tagList(bs_icon("sliders2", class="me-1"),
                             "Tipos de variables"),
             br(),
@@ -370,6 +378,7 @@ mod_glm_bayes_ui <- function(id) {
             tags$hr(),
             layout_columns(
               col_widths = c(4, 8),
+              fill = FALSE,
               radioButtons(
                 ns("manejo_na_glmb"),
                 label    = tagList(bs_icon("exclamation-diamond", class = "me-1"),
@@ -391,6 +400,7 @@ mod_glm_bayes_ui <- function(id) {
       # PESTAÑA 4: Explorar
       # ════════════════════════════════════════════════
       nav_panel(
+        fillable = FALSE,
         title = tagList(bs_icon("zoom-in", class="me-1"), "Explorar"),
         card_body(
           p(class="small text-muted mb-3",
@@ -398,6 +408,7 @@ mod_glm_bayes_ui <- function(id) {
             "Ayuda a identificar predictores relevantes y elegir la familia."),
           layout_columns(col_widths=c(4,8), fill=FALSE,
             card(
+              fill = FALSE,
               card_header(bs_icon("sliders", class="me-1"), "Controles"),
               card_body(
                 uiOutput(ns("sel_var_x_glmb")),
@@ -417,6 +428,7 @@ mod_glm_bayes_ui <- function(id) {
       # PESTAÑA 5: Priors
       # ════════════════════════════════════════════════
       nav_panel(
+        fillable = FALSE,
         title = tagList(bs_icon("sliders", class="me-1"), "Priors"),
         card_body(
           p(class="small text-muted mb-3",
@@ -425,6 +437,7 @@ mod_glm_bayes_ui <- function(id) {
             "Los defaults d\u00e9bilmente informativos funcionan bien en la mayor\u00eda de los casos."),
           layout_columns(col_widths=c(4,8),
             card(
+              fill = FALSE,
               card_header(bs_icon("gear", class="me-1"), "Configuraci\u00f3n de priors"),
               card_body(
                 h6(style=paste0("color:",colores$primario,"; font-weight:700;"),
@@ -478,10 +491,12 @@ mod_glm_bayes_ui <- function(id) {
       # PESTAÑA 6: Ajustar modelo
       # ════════════════════════════════════════════════
       nav_panel(
+        fillable = FALSE,
         title = tagList(bs_icon("gear", class="me-1"), "Ajustar modelo"),
         card_body(
           layout_columns(col_widths=c(4,8),
             card(
+              fill = FALSE,
               card_header(bs_icon("toggles", class="me-1"), "Especificar el modelo"),
               card_body(
                 p(class="small text-muted",
@@ -546,6 +561,7 @@ mod_glm_bayes_ui <- function(id) {
               uiOutput(ns("cards_metricas_glmb")), br(),
               layout_columns(col_widths=c(6,6),
                 card(
+                  fill = FALSE,
                   card_header(bs_icon("bullseye", class="me-1"),
                               "Predichos vs. observados"),
                   card_body(
@@ -555,6 +571,7 @@ mod_glm_bayes_ui <- function(id) {
                   )
                 ),
                 card(
+                  fill = FALSE,
                   card_header(bs_icon("lightbulb", class="me-1"), "Interpretaci\u00f3n"),
                   card_body(uiOutput(ns("texto_modelo_glmb")))
                 )
@@ -568,6 +585,7 @@ mod_glm_bayes_ui <- function(id) {
       # PESTAÑA 7: Diagnóstico MCMC
       # ════════════════════════════════════════════════
       nav_panel(
+        fillable = FALSE,
         title = tagList(bs_icon("activity", class="me-1"), "Diagn\u00f3stico MCMC"),
         card_body(
           p(class="small text-muted mb-3",
@@ -575,29 +593,30 @@ mod_glm_bayes_ui <- function(id) {
             strong("ESS > 400"), ". El PPC compara simulaciones con datos observados."),
           layout_columns(col_widths=c(4,8),
             card(
+              fill = FALSE,
               card_header(bs_icon("stopwatch", class="me-1"),
                           "Diagn\u00f3stico de convergencia"),
               card_body(uiOutput(ns("semaforo_mcmc_glmb")))
             ),
             div(navset_pill(
-              nav_panel(title="Traceplots", br(),
+              nav_panel(title="Traceplots", fillable = FALSE, br(),
                 p(class="small text-muted mb-2",
                   "Las cadenas deben mezclarse como ",
                   strong("orugas peludas"), " superpuestas."),
                 selectInput(ns("param_trace_glmb"), "Par\u00e1metro:", choices=NULL),
                 plotOutput(ns("plot_trace_glmb"), height="280px")
               ),
-              nav_panel(title="Densidades", br(),
+              nav_panel(title="Densidades", fillable = FALSE, br(),
                 p(class="small text-muted mb-2",
                   "Las densidades de las cadenas deben superponerse."),
                 plotOutput(ns("plot_dens_mcmc_glmb"), height="280px")
               ),
-              nav_panel(title="Posterior predictive check", br(),
+              nav_panel(title="Posterior predictive check", fillable = FALSE, br(),
                 p(class="small text-muted mb-2",
                   "Datos observados (l\u00ednea oscura) vs. r\u00e9plicas del posterior."),
                 plotOutput(ns("plot_ppc_post_glmb"), height="280px")
               ),
-              nav_panel(title="R\u0302 y ESS", br(),
+              nav_panel(title="R\u0302 y ESS", fillable = FALSE, br(),
                 div(class="alert alert-info small mb-3",
                   bs_icon("info-circle", class="me-1"),
                   strong("\u00bfESS puede superar las muestras totales?"), " S\u00ed. ",
@@ -615,6 +634,7 @@ mod_glm_bayes_ui <- function(id) {
       # PESTAÑA 8: Performance
       # ════════════════════════════════════════════════
       nav_panel(
+        fillable = FALSE,
         title = tagList(bs_icon("speedometer2", class="me-1"), "Performance"),
         card_body(
           p(class="small text-muted mb-3",
@@ -622,6 +642,7 @@ mod_glm_bayes_ui <- function(id) {
             "mean_PPD compara la media predicha con la observada."),
           layout_columns(col_widths=c(6,6),
             card(
+              fill = FALSE,
               card_header(bs_icon("speedometer2", class="me-1"),
                           "M\u00e9tricas del modelo",
                           span(class="text-muted small ms-2", "\u2014 brms \u00b7 loo")),
@@ -653,6 +674,7 @@ mod_glm_bayes_ui <- function(id) {
       # PESTAÑA 9: Parámetros
       # ════════════════════════════════════════════════
       nav_panel(
+        fillable = FALSE,
         title = tagList(bs_icon("table", class="me-1"), "Par\u00e1metros"),
         div(class="p-3",
           p(class="small text-muted mb-3",
@@ -661,6 +683,7 @@ mod_glm_bayes_ui <- function(id) {
             "IC credible 95%: hay 95% de probabilidad de que \u03b2 est\u00e9 en ese rango."),
           layout_columns(col_widths=c(6,6), fill=FALSE,
             card(
+              fill = FALSE,
               card_header(bs_icon("layout-text-sidebar", class="me-1"),
                           "Tabla de coeficientes",
                           span(class="text-muted small ms-2",
@@ -669,6 +692,7 @@ mod_glm_bayes_ui <- function(id) {
                 uiOutput(ns("tabla_params_ui_glmb")))
             ),
             card(
+              fill = FALSE,
               card_header(bs_icon("bar-chart-fill", class="me-1"),
                           "Forest plot",
                           span(class="text-muted small ms-2",
@@ -682,6 +706,7 @@ mod_glm_bayes_ui <- function(id) {
           ),
           div(class="mt-3",
             card(
+              fill = FALSE,
               card_header(bs_icon("bar-chart-steps", class="me-1"),
                           "Importancia de variables",
                           span(class="text-muted small ms-2",
@@ -701,20 +726,21 @@ mod_glm_bayes_ui <- function(id) {
       # PESTAÑA 10: Gráficos
       # ════════════════════════════════════════════════
       nav_panel(
+        fillable = FALSE,
         title = tagList(bs_icon("graph-up-arrow", class="me-1"), "Gr\u00e1ficos"),
         card_body(navset_pill(
-          nav_panel(title="Distribuciones posteriores", br(),
+          nav_panel(title="Distribuciones posteriores", fillable = FALSE, br(),
             p(class="small text-muted mb-3",
               "Distribuci\u00f3n posterior de cada coeficiente (escala del enlace). ",
               "\u00c1rea sombreada = IC 95%."),
             plotOutput(ns("plot_areas_glmb"), height="380px")
           ),
-          nav_panel(title="Predicho vs. observado", br(),
+          nav_panel(title="Predicho vs. observado", fillable = FALSE, br(),
             p(class="small text-muted mb-3",
               "Comparaci\u00f3n entre valores observados y predichos."),
             plotOutput(ns("plot_predobs_graf_glmb"), height="380px")
           ),
-          nav_panel(title="Residuos", br(),
+          nav_panel(title="Residuos", fillable = FALSE, br(),
             p(class="small text-muted mb-3",
               "Residuos del modelo. Deben distribuirse aleatoriamente."),
             plotOutput(ns("plot_resid_glmb"), height="380px")
@@ -726,6 +752,7 @@ mod_glm_bayes_ui <- function(id) {
       # PESTAÑA 11: Efectos marginales
       # ════════════════════════════════════════════════
       nav_panel(
+        fillable = FALSE,
         title = tagList(bs_icon("arrows-angle-expand", class="me-1"),
                         "Efectos marginales"),
         card_body(
@@ -735,6 +762,7 @@ mod_glm_bayes_ui <- function(id) {
             "Banda = IC credible 95%."),
           layout_columns(col_widths=c(4,8),
             card(
+              fill = FALSE,
               card_header(bs_icon("sliders", class="me-1"), "Controles"),
               card_body(
                 uiOutput(ns("sel_pred_marginal_glmb")),
@@ -747,6 +775,7 @@ mod_glm_bayes_ui <- function(id) {
             ),
             div(
               card(
+                fill = FALSE,
                 card_header(bs_icon("graph-up-arrow", class="me-1"),
                             "Efecto marginal",
                             span(class="text-muted small ms-2",
@@ -765,6 +794,7 @@ mod_glm_bayes_ui <- function(id) {
             "con su IC 95% en escala original."),
           layout_columns(col_widths=c(4,8),
             card(
+              fill = FALSE,
               card_header(bs_icon("sliders", class="me-1"),
                           "Valores de los predictores"),
               card_body(
@@ -775,6 +805,7 @@ mod_glm_bayes_ui <- function(id) {
               )
             ),
             card(
+              fill = FALSE,
               card_header(bs_icon("bullseye", class="me-1"), "Resultado"),
               card_body(uiOutput(ns("resultado_prediccion_glmb")))
             )
@@ -786,6 +817,7 @@ mod_glm_bayes_ui <- function(id) {
       # PESTAÑA 12: Comparar modelos
       # ════════════════════════════════════════════════
       nav_panel(
+        fillable = FALSE,
         title = tagList(bs_icon("arrow-left-right", class="me-1"),
                         "Comparar modelos"),
         card_body(
@@ -798,6 +830,7 @@ mod_glm_bayes_ui <- function(id) {
             "(ej. Poisson vs. binomial negativa)."),
           layout_columns(col_widths=c(4,8),
             card(
+              fill = FALSE,
               card_header(bs_icon("list-check", class="me-1"), "Modelos guardados"),
               card_body(
                 uiOutput(ns("lista_modelos_guardados_glmb")), tags$hr(),
@@ -830,12 +863,14 @@ mod_glm_bayes_ui <- function(id) {
       # PESTAÑA 13: Código R
       # ════════════════════════════════════════════════
       nav_panel(
+        fillable = FALSE,
         title = tagList(bs_icon("code-slash", class="me-1"), "C\u00f3digo R"),
         card_body(
           p(class="text-muted small mb-3",
             "Script reproducible con ", strong("brms"),
             ". Se actualiza seg\u00fan las selecciones activas."),
           card(
+            fill = FALSE,
             card_header(
               class="d-flex justify-content-between align-items-center",
               tagList(bs_icon("code-slash"), " Script reproducible"),

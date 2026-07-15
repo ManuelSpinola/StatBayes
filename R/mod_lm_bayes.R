@@ -24,31 +24,32 @@ mod_lm_bayes_ui <- function(id) {
 
   tagList(
 
-    div(
-      class = "py-3 px-2",
-      h4(
-        bs_icon("graph-up", class = "me-2"),
-        "Regresión lineal bayesiana",
-        style = paste0("color:", colores$primario, "; font-weight:700;")
-      ),
-      p(
-        class = "text-muted mb-0",
-        "Versión bayesiana del modelo lineal general: misma ecuación ",
-        strong("Y = β₀ + β₁X₁ + … + ε"),
-        ", pero ahora los parámetros tienen distribuciones de probabilidad ",
-        "completas. El resultado es una distribución posterior que cuantifica ",
-        "la incertidumbre sobre cada coeficiente."
-      )
-    ),
-
     navset_card_tab(
 
       # ════════════════════════════════════════════════
       # PESTAÑA 1: ¿Qué es?
       # ════════════════════════════════════════════════
       nav_panel(
+        fillable = FALSE,
         title = tagList(bs_icon("book", class = "me-1"), "¿Qué es?"),
         card_body(
+
+          div(
+            class = "px-1 pb-2",
+            h4(
+              bs_icon("graph-up", class = "me-2"),
+              "Regresión lineal bayesiana",
+              style = paste0("color:", colores$primario, "; font-weight:700;")
+            ),
+            p(
+              class = "text-muted mb-0",
+              "Versión bayesiana del modelo lineal general: misma ecuación ",
+              strong("Y = β₀ + β₁X₁ + … + ε"),
+              ", pero ahora los parámetros tienen distribuciones de probabilidad ",
+              "completas. El resultado es una distribución posterior que cuantifica ",
+              "la incertidumbre sobre cada coeficiente."
+            )
+          ),
 
           h5(style = paste0("color:", colores$primario, "; font-weight:700;"),
              "Variable respuesta en la regresión lineal bayesiana"),
@@ -125,6 +126,7 @@ mod_lm_bayes_ui <- function(id) {
 
           layout_columns(
             col_widths = c(4, 4, 4),
+            fill = FALSE,
             div(
               class = "alert alert-info small py-2 px-3 mb-0",
               bs_icon("check-circle-fill", class = "me-1",
@@ -154,6 +156,7 @@ mod_lm_bayes_ui <- function(id) {
              "¿Cuándo NO usar la regresión lineal bayesiana?"),
           layout_columns(
             col_widths = c(4, 4, 4),
+            fill = FALSE,
             div(
               class = "alert alert-warning small py-2 px-3 mb-0",
               bs_icon("x-circle-fill", class = "me-2",
@@ -183,6 +186,7 @@ mod_lm_bayes_ui <- function(id) {
       # PESTAÑA 2: Fundamentos
       # ════════════════════════════════════════════════
       nav_panel(
+        fillable = FALSE,
         title = tagList(bs_icon("journal-bookmark", class = "me-1"),
                         "Fundamentos"),
         card_body(
@@ -211,6 +215,7 @@ mod_lm_bayes_ui <- function(id) {
                    "1. Linealidad")),
             layout_columns(
               col_widths = c(6, 6),
+              fill = FALSE,
               p(class = "small text-muted mb-0",
                 "La relación entre cada predictor (X) y la variable respuesta (Y) ",
                 "debe ser aproximadamente lineal. Una curva no lineal viola este supuesto."),
@@ -233,6 +238,7 @@ mod_lm_bayes_ui <- function(id) {
                    "2. Normalidad de los residuos")),
             layout_columns(
               col_widths = c(6, 6),
+              fill = FALSE,
               p(class = "small text-muted mb-0",
                 "Los errores del modelo deben seguir una distribución normal. ",
                 strong("No es Y quien debe ser normal"), ", sino los residuos. ",
@@ -257,6 +263,7 @@ mod_lm_bayes_ui <- function(id) {
                    "3. Homocedasticidad")),
             layout_columns(
               col_widths = c(6, 6),
+              fill = FALSE,
               p(class = "small text-muted mb-0",
                 "La varianza de los errores debe ser constante en toda la escala ",
                 "de predicción. La heterocedasticidad produce intervalos credibles ",
@@ -281,6 +288,7 @@ mod_lm_bayes_ui <- function(id) {
                    "4. Independencia de los errores")),
             layout_columns(
               col_widths = c(6, 6),
+              fill = FALSE,
               p(class = "small text-muted mb-0",
                 "Cada observación debe ser independiente de las demás. ",
                 "Se viola con medidas repetidas, datos temporales o espaciales, ",
@@ -303,6 +311,7 @@ mod_lm_bayes_ui <- function(id) {
                    "5. Especificación del prior (exclusivo Bayes)")),
             layout_columns(
               col_widths = c(6, 6),
+              fill = FALSE,
               p(class = "small text-muted mb-0",
                 "Los priors deben ser coherentes con el problema. Un prior ",
                 "informativo basado en literatura previa mejora las estimaciones. ",
@@ -321,17 +330,20 @@ mod_lm_bayes_ui <- function(id) {
       # PESTAÑA 3: Los datos
       # ════════════════════════════════════════════════
       nav_panel(
+        fillable = FALSE,
         title = tagList(bs_icon("table", class = "me-1"), "Los datos"),
         card_body(
           navset_pill(
 
             # ── Sub 1: Datos de ejemplo ─────────────
             nav_panel(
+              fillable = FALSE,
               title = tagList(bs_icon("collection", class = "me-1"),
                               "Datos de ejemplo"),
               br(),
               layout_columns(
                 col_widths = c(4, 8),
+                fill = FALSE,
                 div(
                   radioButtons(
                     ns("fuente_datos_lmb"),
@@ -347,6 +359,7 @@ mod_lm_bayes_ui <- function(id) {
                   uiOutput(ns("info_dataset_lmb"))
                 ),
                 card(
+                  fill = FALSE,
                   card_header(bs_icon("eye", class = "me-1"), "Vista previa"),
                   card_body(
                     style = "overflow: auto;",
@@ -360,11 +373,13 @@ mod_lm_bayes_ui <- function(id) {
 
             # ── Sub 2: Mis datos ─────────────────────
             nav_panel(
+              fillable = FALSE,
               title = tagList(bs_icon("folder2-open", class = "me-1"),
                               "Mis datos"),
               br(),
               layout_columns(
                 col_widths = c(4, 8),
+                fill = FALSE,
                 div(
                   p(class = "small text-muted mb-3",
                     bs_icon("info-circle", class = "me-1"),
@@ -390,6 +405,7 @@ mod_lm_bayes_ui <- function(id) {
                   uiOutput(ns("resumen_datos_propio_lmb"))
                 ),
                 card(
+                  fill = FALSE,
                   card_header(bs_icon("eye", class = "me-1"), "Vista previa"),
                   card_body(
                     style = "overflow: auto;",
@@ -403,6 +419,7 @@ mod_lm_bayes_ui <- function(id) {
 
             # ── Sub 3: Tipos de variables ────────────
             nav_panel(
+              fillable = FALSE,
               title = tagList(bs_icon("sliders2", class = "me-1"),
                               "Tipos de variables"),
               br(),
@@ -415,6 +432,7 @@ mod_lm_bayes_ui <- function(id) {
               ),
               layout_columns(
                 col_widths = c(10, 2),
+                fill = FALSE,
                 uiOutput(ns("tabla_tipos_lmb")),
                 div(
                   class = "pt-2",
@@ -432,6 +450,7 @@ mod_lm_bayes_ui <- function(id) {
               tags$hr(),
               layout_columns(
                 col_widths = c(4, 8),
+                fill = FALSE,
                 radioButtons(
                   ns("manejo_na_lmb"),
                   label    = tagList(bs_icon("exclamation-diamond", class = "me-1"),
@@ -453,6 +472,7 @@ mod_lm_bayes_ui <- function(id) {
       # PESTAÑA 4: Explorar
       # ════════════════════════════════════════════════
       nav_panel(
+        fillable = FALSE,
         title = tagList(bs_icon("zoom-in", class = "me-1"), "Explorar"),
         card_body(
           p(class = "small text-muted mb-3",
@@ -463,6 +483,7 @@ mod_lm_bayes_ui <- function(id) {
             col_widths = c(4, 8),
             fill = FALSE,
             card(
+              fill = FALSE,
               card_header(bs_icon("sliders", class = "me-1"), "Controles"),
               card_body(
                 uiOutput(ns("sel_var_x_lmb")),
@@ -489,6 +510,7 @@ mod_lm_bayes_ui <- function(id) {
       # PESTAÑA 5: Priors
       # ════════════════════════════════════════════════
       nav_panel(
+        fillable = FALSE,
         title = tagList(bs_icon("sliders", class = "me-1"), "Priors"),
         card_body(
 
@@ -502,8 +524,10 @@ mod_lm_bayes_ui <- function(id) {
 
           layout_columns(
             col_widths = c(4, 8),
+            fill = FALSE,
 
             card(
+              fill = FALSE,
               card_header(bs_icon("gear", class = "me-1"),
                           "Configuración de priors"),
               card_body(
@@ -571,6 +595,7 @@ mod_lm_bayes_ui <- function(id) {
 
             div(
               card(
+                fill = FALSE,
                 class = "mb-3",
                 card_header(bs_icon("code-slash", class = "me-1"),
                             "Código de priors"),
@@ -579,6 +604,7 @@ mod_lm_bayes_ui <- function(id) {
                 )
               ),
               card(
+                fill = FALSE,
                 class = "mb-0",
                 card_header(bs_icon("eye", class = "me-1"),
                             "Prior predictive check",
@@ -598,12 +624,15 @@ mod_lm_bayes_ui <- function(id) {
       # PESTAÑA 6: Ajustar modelo
       # ════════════════════════════════════════════════
       nav_panel(
+        fillable = FALSE,
         title = tagList(bs_icon("gear", class = "me-1"), "Ajustar modelo"),
         card_body(
           layout_columns(
             col_widths = c(4, 8),
+            fill = FALSE,
 
             card(
+              fill = FALSE,
               card_header(bs_icon("toggles", class = "me-1"),
                           "Especificar el modelo"),
               card_body(
@@ -683,7 +712,9 @@ mod_lm_bayes_ui <- function(id) {
               br(),
               layout_columns(
                 col_widths = c(6, 6),
+                fill = FALSE,
                 card(
+                  fill = FALSE,
                   card_header(bs_icon("bullseye", class = "me-1"),
                               "Predichos vs. observados"),
                   card_body(
@@ -693,6 +724,7 @@ mod_lm_bayes_ui <- function(id) {
                   )
                 ),
                 card(
+                  fill = FALSE,
                   card_header(bs_icon("lightbulb", class = "me-1"),
                               "Interpretación"),
                   card_body(uiOutput(ns("texto_modelo_lmb")))
@@ -707,6 +739,7 @@ mod_lm_bayes_ui <- function(id) {
       # PESTAÑA 7: Diagnóstico MCMC
       # ════════════════════════════════════════════════
       nav_panel(
+        fillable = FALSE,
         title = tagList(bs_icon("activity", class = "me-1"),
                         "Diagnóstico MCMC"),
         card_body(
@@ -720,9 +753,11 @@ mod_lm_bayes_ui <- function(id) {
 
           layout_columns(
             col_widths = c(4, 8),
+            fill = FALSE,
 
             # Semáforo
             card(
+              fill = FALSE,
               card_header(bs_icon("stopwatch", class = "me-1"),
                           "Diagnóstico de convergencia"),
               card_body(uiOutput(ns("semaforo_mcmc_lmb")))
@@ -731,6 +766,7 @@ mod_lm_bayes_ui <- function(id) {
             div(
               navset_pill(
                 nav_panel(
+                  fillable = FALSE,
                   title = "Traceplots",
                   br(),
                   p(class = "small text-muted mb-2",
@@ -742,6 +778,7 @@ mod_lm_bayes_ui <- function(id) {
                   plotOutput(ns("plot_trace_lmb"), height = "280px")
                 ),
                 nav_panel(
+                  fillable = FALSE,
                   title = "Densidades",
                   br(),
                   p(class = "small text-muted mb-2",
@@ -751,6 +788,7 @@ mod_lm_bayes_ui <- function(id) {
                   plotOutput(ns("plot_dens_mcmc_lmb"), height = "280px")
                 ),
                 nav_panel(
+                  fillable = FALSE,
                   title = "Posterior predictive check",
                   br(),
                   p(class = "small text-muted mb-2",
@@ -760,6 +798,7 @@ mod_lm_bayes_ui <- function(id) {
                   plotOutput(ns("plot_ppc_post_lmb"), height = "280px")
                 ),
                 nav_panel(
+                  fillable = FALSE,
                   title = "R\u0302 y ESS",
                   br(),
                   p(class = "small text-muted mb-2",
@@ -795,6 +834,7 @@ mod_lm_bayes_ui <- function(id) {
       # PESTAÑA 8: Performance
       # ════════════════════════════════════════════════
       nav_panel(
+        fillable = FALSE,
         title = tagList(bs_icon("speedometer2", class = "me-1"),
                         "Performance"),
         card_body(
@@ -809,8 +849,10 @@ mod_lm_bayes_ui <- function(id) {
 
           layout_columns(
             col_widths = c(6, 6),
+            fill = FALSE,
 
             card(
+              fill = FALSE,
               card_header(
                 bs_icon("speedometer2", class = "me-1"),
                 "Métricas del modelo",
@@ -822,6 +864,7 @@ mod_lm_bayes_ui <- function(id) {
 
             div(
               card(
+                fill = FALSE,
                 class = "mb-3",
                 card_header(
                   bs_icon("bullseye", class = "me-1"),
@@ -834,6 +877,7 @@ mod_lm_bayes_ui <- function(id) {
                 )
               ),
               card(
+                fill = FALSE,
                 class = "mb-0",
                 card_header(
                   bs_icon("info-circle", class = "me-1"),
@@ -866,6 +910,7 @@ mod_lm_bayes_ui <- function(id) {
       # PESTAÑA 9: Parámetros
       # ════════════════════════════════════════════════
       nav_panel(
+        fillable = FALSE,
         title = tagList(bs_icon("table", class = "me-1"), "Parámetros"),
         div(
           class = "p-3",
@@ -881,6 +926,7 @@ mod_lm_bayes_ui <- function(id) {
             col_widths = c(6, 6),
             fill = FALSE,
             card(
+              fill = FALSE,
               card_header(
                 bs_icon("layout-text-sidebar", class = "me-1"),
                 "Tabla de coeficientes",
@@ -893,6 +939,7 @@ mod_lm_bayes_ui <- function(id) {
               )
             ),
             card(
+              fill = FALSE,
               card_header(
                 bs_icon("bar-chart-fill", class = "me-1"),
                 "Forest plot",
@@ -910,6 +957,7 @@ mod_lm_bayes_ui <- function(id) {
           div(
             class = "mt-3",
             card(
+              fill = FALSE,
               card_header(
                 bs_icon("bar-chart-steps", class = "me-1"),
                 "Importancia de variables",
@@ -933,11 +981,13 @@ mod_lm_bayes_ui <- function(id) {
       # PESTAÑA 10: Gráficos
       # ════════════════════════════════════════════════
       nav_panel(
+        fillable = FALSE,
         title = tagList(bs_icon("graph-up-arrow", class = "me-1"),
                         "Gráficos"),
         card_body(
           navset_pill(
             nav_panel(
+              fillable = FALSE,
               title = "Distribuciones posteriores",
               br(),
               p(class = "small text-muted mb-3",
@@ -946,6 +996,7 @@ mod_lm_bayes_ui <- function(id) {
               plotOutput(ns("plot_areas_lmb"), height = "380px")
             ),
             nav_panel(
+              fillable = FALSE,
               title = "Predicho vs. observado",
               br(),
               p(class = "small text-muted mb-3",
@@ -954,6 +1005,7 @@ mod_lm_bayes_ui <- function(id) {
               plotOutput(ns("plot_predobs_graf_lmb"), height = "380px")
             ),
             nav_panel(
+              fillable = FALSE,
               title = "Residuos",
               br(),
               p(class = "small text-muted mb-3",
@@ -969,6 +1021,7 @@ mod_lm_bayes_ui <- function(id) {
       # PESTAÑA 11: Efectos marginales
       # ════════════════════════════════════════════════
       nav_panel(
+        fillable = FALSE,
         title = tagList(bs_icon("arrows-angle-expand", class = "me-1"),
                         "Efectos marginales"),
         card_body(
@@ -982,8 +1035,10 @@ mod_lm_bayes_ui <- function(id) {
 
           layout_columns(
             col_widths = c(4, 8),
+            fill = FALSE,
 
             card(
+              fill = FALSE,
               card_header(bs_icon("sliders", class = "me-1"), "Controles"),
               card_body(
                 uiOutput(ns("sel_pred_marginal_lmb")),
@@ -1001,6 +1056,7 @@ mod_lm_bayes_ui <- function(id) {
 
             div(
               card(
+                fill = FALSE,
                 card_header(
                   bs_icon("graph-up-arrow", class = "me-1"),
                   "Efecto marginal",
@@ -1026,7 +1082,9 @@ mod_lm_bayes_ui <- function(id) {
           ),
           layout_columns(
             col_widths = c(4, 8),
+            fill = FALSE,
             card(
+              fill = FALSE,
               card_header(bs_icon("sliders", class = "me-1"),
                           "Valores de los predictores"),
               card_body(
@@ -1041,6 +1099,7 @@ mod_lm_bayes_ui <- function(id) {
               )
             ),
             card(
+              fill = FALSE,
               card_header(bs_icon("bullseye", class = "me-1"), "Resultado"),
               card_body(uiOutput(ns("resultado_prediccion_lmb")))
             )
@@ -1052,6 +1111,7 @@ mod_lm_bayes_ui <- function(id) {
       # PESTAÑA 12: Comparar modelos
       # ════════════════════════════════════════════════
       nav_panel(
+        fillable = FALSE,
         title = tagList(bs_icon("arrow-left-right", class = "me-1"),
                         "Comparar modelos"),
         card_body(
@@ -1072,8 +1132,10 @@ mod_lm_bayes_ui <- function(id) {
 
           layout_columns(
             col_widths = c(4, 8),
+            fill = FALSE,
 
             card(
+              fill = FALSE,
               card_header(bs_icon("list-check", class = "me-1"),
                           "Modelos guardados"),
               card_body(
@@ -1088,6 +1150,7 @@ mod_lm_bayes_ui <- function(id) {
 
             div(
               card(
+                fill = FALSE,
                 class = "mb-3",
                 card_header(
                   bs_icon("table", class = "me-1"),
@@ -1097,6 +1160,7 @@ mod_lm_bayes_ui <- function(id) {
                 card_body(uiOutput(ns("tabla_comparacion_lmb")))
               ),
               card(
+                fill = FALSE,
                 class = "mb-0",
                 card_header(
                   bs_icon("bar-chart-fill", class = "me-1"),
@@ -1120,6 +1184,7 @@ mod_lm_bayes_ui <- function(id) {
       # PESTAÑA 13: Código R
       # ════════════════════════════════════════════════
       nav_panel(
+        fillable = FALSE,
         title = tagList(bs_icon("code-slash", class = "me-1"), "Código R"),
         card_body(
           p(class = "text-muted small mb-3",
@@ -1128,6 +1193,7 @@ mod_lm_bayes_ui <- function(id) {
             ". Se actualiza automáticamente según las selecciones activas."
           ),
           card(
+            fill = FALSE,
             card_header(
               class = "d-flex justify-content-between align-items-center",
               tagList(bs_icon("code-slash"), " Script reproducible"),
@@ -1216,6 +1282,7 @@ mod_lm_bayes_server <- function(id) {
       ncat <- sum(sapply(d, function(x) is.factor(x) || is.character(x)))
       layout_columns(
         col_widths = c(4, 4, 4),
+        fill = FALSE,
         card(class = "text-center",
              card_body(class = "p-2",
                h3(style = paste0("color:", colores$primario, "; font-weight:700;"),
@@ -1278,6 +1345,7 @@ mod_lm_bayes_server <- function(id) {
       ncat <- sum(sapply(d, function(x) is.factor(x) || is.character(x)))
       layout_columns(
         col_widths = c(4, 4, 4),
+        fill = FALSE,
         card(class = "text-center",
              card_body(class = "p-2",
                h3(style = paste0("color:", colores$primario, "; font-weight:700;"),
@@ -1735,7 +1803,9 @@ mod_lm_bayes_server <- function(id) {
 
       layout_columns(
         col_widths = c(3, 3, 3, 3),
+        fill = FALSE,
         card(
+          fill = FALSE,
           class = "text-center",
           card_body(class = "p-2",
                     h4(style = paste0("color:", colores$primario,
@@ -1743,6 +1813,7 @@ mod_lm_bayes_server <- function(id) {
                     p(class = "small text-muted mb-0", "R² bayesiano"))
         ),
         card(
+          fill = FALSE,
           class = "text-center",
           card_body(class = "p-2",
                     h4(style = paste0("color:", colores$acento,
@@ -1750,6 +1821,7 @@ mod_lm_bayes_server <- function(id) {
                     p(class = "small text-muted mb-0", "RMSE posterior"))
         ),
         card(
+          fill = FALSE,
           class = "text-center",
           card_body(class = "p-2",
                     h4(style = paste0("color:", colores$secundario,
@@ -1757,6 +1829,7 @@ mod_lm_bayes_server <- function(id) {
                     p(class = "small text-muted mb-0", "ELPD-LOO"))
         ),
         card(
+          fill = FALSE,
           class = "text-center",
           card_body(class = "p-2",
                     h4(style = paste0("color:", colores$secundario,

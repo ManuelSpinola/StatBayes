@@ -58,7 +58,7 @@ mod_mixed_bayes_ui <- function(id) {
             tags$code("family"), "."
           ),
 
-          layout_columns(col_widths = c(6, 6),
+          layout_columns(col_widths = c(6, 6), fill = FALSE,
             card(
               fill = FALSE,
               card_header(bs_icon("arrow-left-right", class = "me-1"),
@@ -141,7 +141,7 @@ mod_mixed_bayes_ui <- function(id) {
 
           h5(style = paste0("color:", colores$primario, "; font-weight:700;"),
              "\u00bfCu\u00e1ndo usar modelos mixtos bayesianos?"),
-          layout_columns(col_widths = c(4, 4, 4),
+          layout_columns(col_widths = c(4, 4, 4), fill = FALSE,
             div(class = "alert alert-info small py-2 px-3 mb-0",
               bs_icon("check-circle-fill", class = "me-1",
                       style = paste0("color:", colores$primario)),
@@ -188,7 +188,7 @@ mod_mixed_bayes_ui <- function(id) {
                 h6(class = "mb-0",
                    style = paste0("color:", colores$primario, "; font-weight:700;"),
                    "Efectos fijos (\u03b2)")),
-            layout_columns(col_widths = c(6, 6),
+            layout_columns(col_widths = c(6, 6), fill = FALSE,
               p(class = "small text-muted mb-0",
                 "Representan efectos ", strong("constantes para toda la poblaci\u00f3n"),
                 ". El efecto del tratamiento, la temperatura o la edad son ",
@@ -209,7 +209,7 @@ mod_mixed_bayes_ui <- function(id) {
                 h6(class = "mb-0",
                    style = paste0("color:", colores$acento, "; font-weight:700;"),
                    "Efectos aleatorios (u)")),
-            layout_columns(col_widths = c(6, 6),
+            layout_columns(col_widths = c(6, 6), fill = FALSE,
               p(class = "small text-muted mb-0",
                 "Representan la ", strong("variabilidad entre grupos"),
                 ". Cada grupo tiene su propio intercepto o pendiente, ",
@@ -231,7 +231,7 @@ mod_mixed_bayes_ui <- function(id) {
                 h6(class = "mb-0",
                    style = paste0("color:", colores$secundario, "; font-weight:700;"),
                    "Shrinkage (contracci\u00f3n bayesiana)")),
-            layout_columns(col_widths = c(6, 6),
+            layout_columns(col_widths = c(6, 6), fill = FALSE,
               p(class = "small text-muted mb-0",
                 "Los efectos aleatorios bayesianos aplican ",
                 strong("contracci\u00f3n"), " hacia la media poblacional. ",
@@ -250,7 +250,7 @@ mod_mixed_bayes_ui <- function(id) {
                 bs_icon("sliders", style = "color:#9F8B75; font-size:1.1rem"),
                 h6(class = "mb-0", style = "color:#9F8B75; font-weight:700;",
                    "Priors en modelos mixtos")),
-            layout_columns(col_widths = c(6, 6),
+            layout_columns(col_widths = c(6, 6), fill = FALSE,
               p(class = "small text-muted mb-0",
                 "Adem\u00e1s de los priors sobre \u03b2, hay que especificar priors ",
                 "sobre las desviaciones est\u00e1ndar de los efectos aleatorios (\u03c3). ",
@@ -279,7 +279,7 @@ mod_mixed_bayes_ui <- function(id) {
             title = tagList(bs_icon("collection", class = "me-1"),
                             "Datos de ejemplo"),
             br(),
-            layout_columns(col_widths = c(4, 8),
+            layout_columns(col_widths = c(4, 8), fill = FALSE,
               div(
                 radioButtons(ns("fuente_datos_mxb"),
                   label = tagList(bs_icon("database", class = "me-1"),
@@ -311,7 +311,7 @@ mod_mixed_bayes_ui <- function(id) {
             title = tagList(bs_icon("folder2-open", class = "me-1"),
                             "Mis datos"),
             br(),
-            layout_columns(col_widths = c(4, 8),
+            layout_columns(col_widths = c(4, 8), fill = FALSE,
               div(
                 p(class = "small text-muted mb-3",
                   bs_icon("info-circle", class = "me-1"),
@@ -349,7 +349,7 @@ mod_mixed_bayes_ui <- function(id) {
               "Verifica que la variable de agrupamiento sea ",
               strong("Factor"), ". Las variables de respuesta y predictores ",
               "num\u00e9ricos deben ser ", strong("Num\u00e9rico"), "."),
-            layout_columns(col_widths = c(10, 2),
+            layout_columns(col_widths = c(10, 2), fill = FALSE,
               uiOutput(ns("tabla_tipos_mxb")),
               div(class = "pt-2",
                 actionButton(ns("aplicar_tipos_mxb"), "Aplicar tipos",
@@ -365,6 +365,7 @@ mod_mixed_bayes_ui <- function(id) {
             tags$hr(),
             layout_columns(
               col_widths = c(4, 8),
+              fill = FALSE,
               radioButtons(
                 ns("manejo_na_mxb"),
                 label    = tagList(bs_icon("exclamation-diamond", class = "me-1"),
@@ -426,7 +427,7 @@ mod_mixed_bayes_ui <- function(id) {
             strong("desviaciones est\u00e1ndar de los efectos aleatorios"),
             " (\u03c3_grupo). brms usa por defecto ",
             tags$code("student_t(3, 0, 2.5)"), " para ambos."),
-          layout_columns(col_widths = c(4, 8),
+          layout_columns(col_widths = c(4, 8), fill = FALSE,
             card(
               fill = FALSE,
               card_header(bs_icon("gear", class = "me-1"),
@@ -502,7 +503,7 @@ mod_mixed_bayes_ui <- function(id) {
         fillable = FALSE,
         title = tagList(bs_icon("gear", class = "me-1"), "Ajustar modelo"),
         card_body(
-          layout_columns(col_widths = c(4, 8),
+          layout_columns(col_widths = c(4, 8), fill = FALSE,
             card(
               fill = FALSE,
               card_header(bs_icon("toggles", class = "me-1"),
@@ -573,7 +574,7 @@ mod_mixed_bayes_ui <- function(id) {
             ),
             div(
               uiOutput(ns("cards_metricas_mxb")), br(),
-              layout_columns(col_widths = c(6, 6),
+              layout_columns(col_widths = c(6, 6), fill = FALSE,
                 card(
                   fill = FALSE,
                   card_header(bs_icon("bullseye", class = "me-1"),
@@ -606,7 +607,7 @@ mod_mixed_bayes_ui <- function(id) {
             "Los modelos mixtos generan m\u00e1s par\u00e1metros que los simples. ",
             "Verifica ", strong("R\u0302 < 1.01"), " y ", strong("ESS > 400"),
             " para todos los par\u00e1metros, incluyendo las varianzas aleatorias."),
-          layout_columns(col_widths = c(4, 8),
+          layout_columns(col_widths = c(4, 8), fill = FALSE,
             card(
               fill = FALSE,
               card_header(bs_icon("stopwatch", class = "me-1"),
@@ -650,7 +651,7 @@ mod_mixed_bayes_ui <- function(id) {
             "M\u00e9tricas de rendimiento. El R\u00b2 bayesiano en modelos mixtos ",
             "puede descomponerse en R\u00b2 marginal (solo efectos fijos) y ",
             "R\u00b2 condicional (efectos fijos + aleatorios)."),
-          layout_columns(col_widths = c(6, 6),
+          layout_columns(col_widths = c(6, 6), fill = FALSE,
             card(
               fill = FALSE,
               card_header(bs_icon("speedometer2", class = "me-1"),
@@ -767,7 +768,7 @@ mod_mixed_bayes_ui <- function(id) {
           p(class = "small text-muted mb-3",
             "Efecto marginal promediado sobre los grupos (efectos fijos). ",
             "La banda es el IC credible 95%."),
-          layout_columns(col_widths = c(4, 8),
+          layout_columns(col_widths = c(4, 8), fill = FALSE,
             card(
               fill = FALSE,
               card_header(bs_icon("sliders", class = "me-1"), "Controles"),
@@ -809,7 +810,7 @@ mod_mixed_bayes_ui <- function(id) {
             strong("Tip:"), " compara ", tags$code("y ~ x + (1|grupo)"),
             " vs. ", tags$code("y ~ x + (1 + x|grupo)"),
             " para evaluar si la pendiente aleatoria mejora el modelo."),
-          layout_columns(col_widths = c(4, 8),
+          layout_columns(col_widths = c(4, 8), fill = FALSE,
             card(
               fill = FALSE,
               card_header(bs_icon("list-check", class = "me-1"),
@@ -971,7 +972,7 @@ mod_mixed_bayes_server <- function(id) {
       d <- datos()
       nnum <- sum(sapply(d, is.numeric))
       ncat <- sum(sapply(d, function(x) is.factor(x) || is.character(x)))
-      layout_columns(col_widths = c(4, 4, 4),
+      layout_columns(col_widths = c(4, 4, 4), fill = FALSE,
         card(class = "text-center",
           card_body(class = "p-2",
             h3(style = paste0("color:", colores$primario, "; font-weight:700;"),
@@ -1030,7 +1031,7 @@ mod_mixed_bayes_server <- function(id) {
       d <- datos_propio_mxb()
       nnum <- sum(sapply(d, is.numeric))
       ncat <- sum(sapply(d, function(x) is.factor(x) || is.character(x)))
-      layout_columns(col_widths = c(4, 4, 4),
+      layout_columns(col_widths = c(4, 4, 4), fill = FALSE,
         card(class = "text-center",
           card_body(class = "p-2",
             h3(style = paste0("color:", colores$primario, "; font-weight:700;"),
@@ -1464,7 +1465,7 @@ mod_mixed_bayes_server <- function(id) {
         pe <- brms::predictive_error(fit)
         round(sqrt(mean(pe^2)), 3)
       }, error = function(e) "\u2014")
-      layout_columns(col_widths = c(4, 4, 4),
+      layout_columns(col_widths = c(4, 4, 4), fill = FALSE,
         card(class = "text-center",
           card_body(class = "p-2",
             h4(style = paste0("color:", colores$primario, "; font-weight:700;"), r2),

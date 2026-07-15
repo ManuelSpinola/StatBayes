@@ -55,7 +55,7 @@ mod_gam_bayes_ui <- function(id) {
             "la distribuci\u00f3n posterior completa de cada curva suavizada."
           ),
 
-          layout_columns(col_widths = c(6, 6),
+          layout_columns(col_widths = c(6, 6), fill = FALSE,
             card(
               fill = FALSE,
               card_header(bs_icon("arrow-left-right", class = "me-1"),
@@ -121,7 +121,7 @@ mod_gam_bayes_ui <- function(id) {
             "La sintaxis es id\u00e9ntica a mgcv. Puedes combinar t\u00e9rminos ",
             "lineales y suaves en la misma f\u00f3rmula:"),
 
-          layout_columns(col_widths = c(6, 6),
+          layout_columns(col_widths = c(6, 6), fill = FALSE,
             div(
               class = "codigo-bloque",
               "# Solo t\u00e9rminos suaves\n",
@@ -172,7 +172,7 @@ mod_gam_bayes_ui <- function(id) {
                 h6(class = "mb-0",
                    style = paste0("color:", colores$primario, "; font-weight:700;"),
                    "1. Suavizado controlado por priors")),
-            layout_columns(col_widths = c(6, 6),
+            layout_columns(col_widths = c(6, 6), fill = FALSE,
               p(class = "small text-muted mb-0",
                 "El prior sobre los coeficientes del spline controla cu\u00e1nto ",
                 "se permite que la curva sea irregular. Un prior m\u00e1s estrecho ",
@@ -193,7 +193,7 @@ mod_gam_bayes_ui <- function(id) {
                 h6(class = "mb-0",
                    style = paste0("color:", colores$secundario, "; font-weight:700;"),
                    "2. Incertidumbre sobre la curva")),
-            layout_columns(col_widths = c(6, 6),
+            layout_columns(col_widths = c(6, 6), fill = FALSE,
               p(class = "small text-muted mb-0",
                 "A diferencia de mgcv, el GAM bayesiano produce una ",
                 strong("distribuci\u00f3n posterior de curvas"),
@@ -215,7 +215,7 @@ mod_gam_bayes_ui <- function(id) {
                 h6(class = "mb-0",
                    style = paste0("color:", colores$acento, "; font-weight:700;"),
                    "3. Familia de distribuci\u00f3n")),
-            layout_columns(col_widths = c(6, 6),
+            layout_columns(col_widths = c(6, 6), fill = FALSE,
               p(class = "small text-muted mb-0",
                 "Como en el GLM bayesiano, puedes usar cualquier familia: ",
                 "gaussian, binomial, Poisson, binomial negativa, Beta, ",
@@ -236,7 +236,7 @@ mod_gam_bayes_ui <- function(id) {
                 h6(class = "mb-0",
                    style = paste0("color:", colores$peligro, "; font-weight:700;"),
                    "4. Consideraciones pr\u00e1cticas")),
-            layout_columns(col_widths = c(6, 6),
+            layout_columns(col_widths = c(6, 6), fill = FALSE,
               p(class = "small text-muted mb-0",
                 "El GAM bayesiano es m\u00e1s lento que mgcv porque requiere MCMC. ",
                 "Con m\u00e1s de 2-3 t\u00e9rminos suaves y muestras grandes puede ",
@@ -263,7 +263,7 @@ mod_gam_bayes_ui <- function(id) {
             title = tagList(bs_icon("collection", class = "me-1"),
                             "Datos de ejemplo"),
             br(),
-            layout_columns(col_widths = c(4, 8),
+            layout_columns(col_widths = c(4, 8), fill = FALSE,
               div(
                 radioButtons(ns("fuente_datos_gamb"),
                   label = tagList(bs_icon("database", class = "me-1"),
@@ -297,7 +297,7 @@ mod_gam_bayes_ui <- function(id) {
             title = tagList(bs_icon("folder2-open", class = "me-1"),
                             "Mis datos"),
             br(),
-            layout_columns(col_widths = c(4, 8),
+            layout_columns(col_widths = c(4, 8), fill = FALSE,
               div(
                 p(class = "small text-muted mb-3",
                   bs_icon("info-circle", class = "me-1"),
@@ -334,7 +334,7 @@ mod_gam_bayes_ui <- function(id) {
               "Verifica que cada variable tenga el tipo correcto. ",
               "Los predictores para t\u00e9rminos suaves ", tags$code("s()"),
               " deben ser ", strong("num\u00e9ricos"), "."),
-            layout_columns(col_widths = c(10, 2),
+            layout_columns(col_widths = c(10, 2), fill = FALSE,
               uiOutput(ns("tabla_tipos_gamb")),
               div(class = "pt-2",
                 actionButton(ns("aplicar_tipos_gamb"), "Aplicar tipos",
@@ -350,6 +350,7 @@ mod_gam_bayes_ui <- function(id) {
             tags$hr(),
             layout_columns(
               col_widths = c(4, 8),
+              fill = FALSE,
               radioButtons(
                 ns("manejo_na_gamb"),
                 label    = tagList(bs_icon("exclamation-diamond", class = "me-1"),
@@ -409,7 +410,7 @@ mod_gam_bayes_ui <- function(id) {
             "brms usa priors t-Student por defecto para los coeficientes ",
             "de los splines, lo que permite curvas m\u00e1s flexibles. ",
             "Un prior m\u00e1s estrecho produce curvas m\u00e1s suaves."),
-          layout_columns(col_widths = c(4, 8),
+          layout_columns(col_widths = c(4, 8), fill = FALSE,
             card(
               fill = FALSE,
               card_header(bs_icon("gear", class = "me-1"),
@@ -482,7 +483,7 @@ mod_gam_bayes_ui <- function(id) {
         fillable = FALSE,
         title = tagList(bs_icon("gear", class = "me-1"), "Ajustar modelo"),
         card_body(
-          layout_columns(col_widths = c(4, 8),
+          layout_columns(col_widths = c(4, 8), fill = FALSE,
             card(
               fill = FALSE,
               card_header(bs_icon("toggles", class = "me-1"),
@@ -544,7 +545,7 @@ mod_gam_bayes_ui <- function(id) {
             ),
             div(
               uiOutput(ns("cards_metricas_gamb")), br(),
-              layout_columns(col_widths = c(6, 6),
+              layout_columns(col_widths = c(6, 6), fill = FALSE,
                 card(
                   fill = FALSE,
                   card_header(bs_icon("bullseye", class = "me-1"),
@@ -580,7 +581,7 @@ mod_gam_bayes_ui <- function(id) {
             strong("ESS > 400"), ". Los splines generan m\u00e1s par\u00e1metros ",
             "que un GLM, por lo que es especialmente importante verificar ",
             "la convergencia de todos los t\u00e9rminos."),
-          layout_columns(col_widths = c(4, 8),
+          layout_columns(col_widths = c(4, 8), fill = FALSE,
             card(
               fill = FALSE,
               card_header(bs_icon("stopwatch", class = "me-1"),
@@ -630,7 +631,7 @@ mod_gam_bayes_ui <- function(id) {
           p(class = "small text-muted mb-3",
             "M\u00e9tricas de rendimiento del GAM bayesiano. ",
             "LOO y WAIC permiten comparar modelos con y sin t\u00e9rminos suaves."),
-          layout_columns(col_widths = c(6, 6),
+          layout_columns(col_widths = c(6, 6), fill = FALSE,
             card(
               fill = FALSE,
               card_header(bs_icon("speedometer2", class = "me-1"),
@@ -761,7 +762,7 @@ mod_gam_bayes_ui <- function(id) {
             "Efecto de cada predictor sobre Y manteniendo el resto en sus ",
             "valores t\u00edpicos. Para t\u00e9rminos suaves, muestra la curva ",
             "posterior con IC credible 95%."),
-          layout_columns(col_widths = c(4, 8),
+          layout_columns(col_widths = c(4, 8), fill = FALSE,
             card(
               fill = FALSE,
               card_header(bs_icon("sliders", class = "me-1"), "Controles"),
@@ -806,7 +807,7 @@ mod_gam_bayes_ui <- function(id) {
             tags$code("y ~ s(x)"), " (suave) y ",
             tags$code("y ~ x"), " (lineal) y comp\u00e1ralos. ",
             "Si LOO no mejora, la relaci\u00f3n es suficientemente lineal."),
-          layout_columns(col_widths = c(4, 8),
+          layout_columns(col_widths = c(4, 8), fill = FALSE,
             card(
               fill = FALSE,
               card_header(bs_icon("list-check", class = "me-1"),
@@ -937,7 +938,7 @@ mod_gam_bayes_server <- function(id) {
       d <- datos()
       nnum <- sum(sapply(d, is.numeric))
       ncat <- sum(sapply(d, function(x) is.factor(x) || is.character(x)))
-      layout_columns(col_widths = c(4, 4, 4),
+      layout_columns(col_widths = c(4, 4, 4), fill = FALSE,
         card(class = "text-center",
           card_body(class = "p-2",
             h3(style = paste0("color:", colores$primario, "; font-weight:700;"),
@@ -996,7 +997,7 @@ mod_gam_bayes_server <- function(id) {
       d <- datos_propio_gamb()
       nnum <- sum(sapply(d, is.numeric))
       ncat <- sum(sapply(d, function(x) is.factor(x) || is.character(x)))
-      layout_columns(col_widths = c(4, 4, 4),
+      layout_columns(col_widths = c(4, 4, 4), fill = FALSE,
         card(class = "text-center",
           card_body(class = "p-2",
             h3(style = paste0("color:", colores$primario, "; font-weight:700;"),
@@ -1410,7 +1411,7 @@ mod_gam_bayes_server <- function(id) {
       }, error = function(e) "\u2014")
       r2 <- tryCatch(round(brms::bayes_R2(fit)[1, "Estimate"], 3),
                      error = function(e) "\u2014")
-      layout_columns(col_widths = c(4, 4, 4),
+      layout_columns(col_widths = c(4, 4, 4), fill = FALSE,
         card(class = "text-center",
           card_body(class = "p-2",
             h4(style = paste0("color:", colores$primario, "; font-weight:700;"), r2),

@@ -365,7 +365,23 @@ mod_glm_bayes_ui <- function(id) {
                              icon=icon("rotate-left"))
               )
             ),
-            uiOutput(ns("tipos_aplicados_msg_glmb"))
+            uiOutput(ns("tipos_aplicados_msg_glmb")),
+
+            tags$hr(),
+            layout_columns(
+              col_widths = c(4, 8),
+              radioButtons(
+                ns("manejo_na_glmb"),
+                label    = tagList(bs_icon("exclamation-diamond", class = "me-1"),
+                                   "Valores perdidos (NA)"),
+                choices  = c(
+                  "Conservar"             = "conservar",
+                  "Eliminar filas con NA" = "eliminar"
+                ),
+                selected = "conservar"
+              ),
+              uiOutput(ns("na_info_glmb"))
+            )
           )
 
         ))
@@ -859,13 +875,44 @@ mod_glm_bayes_server <- function(id) {
     datos_mod <- reactiveVal(NULL)
     observeEvent(datos(), { datos_mod(datos()) })
 
+    # ── Manejo de NAs ────────────────────────────────────────────────────────
+    datos_finales_glmb <- reactive({
+      df <- datos_mod()
+      req(df)
+      if (isTRUE(input$manejo_na_glmb == "eliminar")) {
+        df <- tidyr::drop_na(df)
+      }
+      df
+    })
+
+    output$na_info_glmb <- renderUI({
+      df_orig  <- datos_mod()
+      df_final <- datos_finales_glmb()
+      req(df_orig)
+      n_na <- sum(!stats::complete.cases(df_orig))
+      if (n_na == 0) return(
+        div(class = "alert alert-success small py-2 px-3 mb-0",
+            bs_icon("check-circle", class = "me-1"), "Sin valores perdidos.")
+      )
+      n_elim <- nrow(df_orig) - nrow(df_final)
+      if (input$manejo_na_glmb == "eliminar")
+        div(class = "alert alert-warning small py-2 px-3 mb-0",
+            bs_icon("exclamation-triangle", class = "me-1"),
+            paste0(n_elim, " fila(s) eliminadas. Quedan ", nrow(df_final), " filas."))
+      else
+        div(class = "alert alert-info small py-2 px-3 mb-0",
+            bs_icon("info-circle", class = "me-1"),
+            paste0(n_na, " fila(s) con NA. El modelo puede fallar o excluirlas ",
+                   "autom\u00e1ticamente \u2014 pod\u00e9s eliminarlas arriba para mayor control."))
+    })
+
     vars_num <- reactive({
-      req(datos_mod())
-      names(which(sapply(datos_mod(), is.numeric)))
+      req(datos_finales_glmb())
+      names(which(sapply(datos_finales_glmb(), is.numeric)))
     })
     vars_cat <- reactive({
-      req(datos_mod())
-      names(which(sapply(datos_mod(),
+      req(datos_finales_glmb())
+      names(which(sapply(datos_finales_glmb(),
                          function(x) is.factor(x) || is.character(x))))
     })
 
@@ -1148,8 +1195,8 @@ mod_glm_bayes_server <- function(id) {
     })
 
     output$plot_scatter_glmb <- renderPlot({
-      req(datos_mod(), input$var_x_glmb, input$var_y_glmb)
-      d <- datos_mod()
+      req(datos_finales_glmb(), input$var_x_glmb, input$var_y_glmb)
+      d <- datos_finales_glmb()
       x <- input$var_x_glmb; y <- input$var_y_glmb
       req(x %in% names(d), y %in% names(d))
       p <- ggplot(d, aes(.data[[x]], as.numeric(as.factor(.data[[y]]))-1)) +
@@ -1168,8 +1215,8 @@ mod_glm_bayes_server <- function(id) {
     })
 
     output$info_y_glmb <- renderUI({
-      req(datos_mod(), input$var_y_glmb)
-      d <- datos_mod(); y <- input$var_y_glmb
+      req(datos_finales_glmb(), input$var_y_glmb)
+      d <- datos_finales_glmb(); y <- input$var_y_glmb
       if (!y %in% names(d)) return(NULL)
       col <- d[[y]]
       if (is.factor(col) || is.character(col))
@@ -1211,7 +1258,7 @@ mod_glm_bayes_server <- function(id) {
     })
 
     observeEvent(input$ver_ppc_glmb, {
-      req(datos_mod())
+      req(datos_finales_glmb())
       n <- 200; x <- rnorm(100)
       familia <- input$familia_glmb %||% "binomial"
       mat <- replicate(n, {
@@ -1345,8 +1392,8 @@ mod_glm_bayes_server <- function(id) {
     })
 
     observeEvent(input$ajustar_glmb, {
-      req(datos_mod(), input$var_y_glmb)
-      d     <- datos_mod()
+      req(datos_finales_glmb(), input$var_y_glmb)
+      d     <- datos_finales_glmb()
       preds <- c(input$preds_num_glmb, input$preds_cat_glmb,
                  input$interacciones_glmb)
       if (length(preds)==0) preds <- "1"
@@ -1770,7 +1817,7 @@ mod_glm_bayes_server <- function(id) {
     output$inputs_prediccion_glmb <- renderUI({
       req(modelo_actual_glmb())
       preds <- c(input$preds_num_glmb, input$preds_cat_glmb)
-      d     <- datos_mod()
+      d     <- datos_finales_glmb()
       lapply(preds, function(p) {
         if (is.numeric(d[[p]]))
           numericInput(ns(paste0("pred_val_",p)), p,

@@ -427,7 +427,23 @@ mod_lm_bayes_ui <- function(id) {
                                icon  = icon("rotate-left"))
                 )
               ),
-              uiOutput(ns("tipos_aplicados_msg_lmb"))
+              uiOutput(ns("tipos_aplicados_msg_lmb")),
+
+              tags$hr(),
+              layout_columns(
+                col_widths = c(4, 8),
+                radioButtons(
+                  ns("manejo_na_lmb"),
+                  label    = tagList(bs_icon("exclamation-diamond", class = "me-1"),
+                                     "Valores perdidos (NA)"),
+                  choices  = c(
+                    "Conservar"             = "conservar",
+                    "Eliminar filas con NA" = "eliminar"
+                  ),
+                  selected = "conservar"
+                ),
+                uiOutput(ns("na_info_lmb"))
+              )
             )
           )
         )
@@ -1395,15 +1411,46 @@ mod_lm_bayes_server <- function(id) {
       datos_mod(datos())
     })
 
+    # ── Manejo de NAs ────────────────────────────────────────────────────────
+    datos_finales_lmb <- reactive({
+      df <- datos_mod()
+      req(df)
+      if (isTRUE(input$manejo_na_lmb == "eliminar")) {
+        df <- tidyr::drop_na(df)
+      }
+      df
+    })
+
+    output$na_info_lmb <- renderUI({
+      df_orig  <- datos_mod()
+      df_final <- datos_finales_lmb()
+      req(df_orig)
+      n_na <- sum(!stats::complete.cases(df_orig))
+      if (n_na == 0) return(
+        div(class = "alert alert-success small py-2 px-3 mb-0",
+            bs_icon("check-circle", class = "me-1"), "Sin valores perdidos.")
+      )
+      n_elim <- nrow(df_orig) - nrow(df_final)
+      if (input$manejo_na_lmb == "eliminar")
+        div(class = "alert alert-warning small py-2 px-3 mb-0",
+            bs_icon("exclamation-triangle", class = "me-1"),
+            paste0(n_elim, " fila(s) eliminadas. Quedan ", nrow(df_final), " filas."))
+      else
+        div(class = "alert alert-info small py-2 px-3 mb-0",
+            bs_icon("info-circle", class = "me-1"),
+            paste0(n_na, " fila(s) con NA. El modelo puede fallar o excluirlas ",
+                   "autom\u00e1ticamente \u2014 pod\u00e9s eliminarlas arriba para mayor control."))
+    })
+
     # ── Exploración ───────────────────────────────────
     vars_num <- reactive({
-      req(datos_mod())
-      names(which(sapply(datos_mod(), is.numeric)))
+      req(datos_finales_lmb())
+      names(which(sapply(datos_finales_lmb(), is.numeric)))
     })
 
     vars_cat <- reactive({
-      req(datos_mod())
-      names(which(sapply(datos_mod(), function(x)
+      req(datos_finales_lmb())
+      names(which(sapply(datos_finales_lmb(), function(x)
         is.factor(x) || is.character(x))))
     })
 
@@ -1418,8 +1465,8 @@ mod_lm_bayes_server <- function(id) {
     })
 
     output$plot_scatter_lmb <- renderPlot({
-      req(datos_mod(), input$var_x_lmb)
-      d   <- datos_mod()
+      req(datos_finales_lmb(), input$var_x_lmb)
+      d   <- datos_finales_lmb()
       x   <- input$var_x_lmb
       col <- input$var_color_lmb
 
@@ -1454,8 +1501,8 @@ mod_lm_bayes_server <- function(id) {
     })
 
     output$cards_correlacion_lmb <- renderUI({
-      req(datos_mod(), input$var_x_lmb)
-      d <- datos_mod()
+      req(datos_finales_lmb(), input$var_x_lmb)
+      d <- datos_finales_lmb()
       x <- input$var_x_lmb
       ys <- setdiff(vars_num(), x)
       if (length(ys) == 0) return(NULL)
@@ -1505,7 +1552,7 @@ mod_lm_bayes_server <- function(id) {
 
     # ── Priors: PPC ───────────────────────────────────
     observeEvent(input$ver_ppc_lmb, {
-      req(datos_mod())
+      req(datos_finales_lmb())
       n   <- 200
       x   <- rnorm(100)
       mat <- replicate(n, {
@@ -1625,8 +1672,8 @@ mod_lm_bayes_server <- function(id) {
     })
 
     observeEvent(input$ajustar_lmb, {
-      req(datos_mod(), input$var_y_lmb)
-      d   <- datos_mod()
+      req(datos_finales_lmb(), input$var_y_lmb)
+      d   <- datos_finales_lmb()
       frm <- formula_lmb()
 
       if (isTRUE(input$estandarizar_lmb)) {
@@ -2182,7 +2229,7 @@ mod_lm_bayes_server <- function(id) {
     output$inputs_prediccion_lmb <- renderUI({
       req(modelo_actual())
       preds <- c(input$preds_num_lmb, input$preds_cat_lmb)
-      d     <- datos_mod()
+      d     <- datos_finales_lmb()
       lapply(preds, function(p) {
         if (is.numeric(d[[p]])) {
           numericInput(ns(paste0("pred_val_", p)), p,
